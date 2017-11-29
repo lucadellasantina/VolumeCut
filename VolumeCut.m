@@ -15,7 +15,6 @@
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % This software is released under the terms of the GPL v3 software license
 %
-%
 % |*VolumeCut cuts a three dimensional image stack along an arbitrary
 % surface. The surface is defined by the user that specifies reference
 % point coordinates in a MATLAB matrix. The program then fits a surface 
@@ -73,7 +72,7 @@
 % * txtBar.m (display progress a text progress bar in the command window)
 
 % Choose the TIF image stack to slice
-disp('----- VolumeCut 1.4 -----');
+disp('----- VolumeCut 1.4.1 -----');
 [FileName, PathName] = uigetfile('*.tif', 'Select the image to slice');
 
 % Read the image size and resolution from file
@@ -205,6 +204,8 @@ elseif nbfiles == 2
             offset2 = input('How many µm before plane #2 shall I stop cutting? (0: precisely at plane): ');
             offset2 = ceil(offset2/tmpZres); % convert microns to pixels
             % calculate the surface exactly half way between those two limit surfaces
+            g1 = g1+offset1;
+            g2 = g2-offset2;
             g3 = ceil((g2+g1)/2);
             hold on;
             surf(gx,gy,g3);
@@ -220,7 +221,7 @@ elseif nbfiles == 2
             for x=1:size(I,1)
                 for y=1:size(I,2)
                     for z=1:size(I,3)
-                        if z <= (g1(ceil(x/2),ceil(y/2))+offset1)
+                        if z <= (g1(ceil(x/2),ceil(y/2)))
                             I1(x,y,z)=0;
                         end
                         if z >= g3(ceil(x/2),ceil(y/2))
@@ -228,7 +229,7 @@ elseif nbfiles == 2
                         else
                             I2(x,y,z)=0;
                         end
-                        if z >= (g2(ceil(x/2),ceil(y/2))-offset2)
+                        if z >= (g2(ceil(x/2),ceil(y/2)))
                             I2(x,y,z)=0;
                         end
                     end
@@ -299,7 +300,13 @@ saveastiff(I1, [PathName FileName '-part1' ext]);
 fprintf('Saving sliced volume -part2 ... ');
 saveastiff(I2, [PathName FileName '-part2' ext]);
 disp('----- VolumeCut operation done! -----');
+
+clear ans ext File* g* I* mode nbfiles offset* Path* SpotsXYZ tmp* x y z j;
 %% Changelog
+%
+% _*Version 1.4.1*            created on 2017-11-29 by Luca Della Santina_
+%
+%  + Fixed bug in applying offset1 and offset2 to calculade midle plane
 %
 % _*Version 1.4*             created on 2017-11-20 by Luca Della Santina_
 %
