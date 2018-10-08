@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="ObjectFinder : Recognize 3D structures in image stacks" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300italic,700,700italic' rel='stylesheet' type='text/css'>
+
+    <title>VolumeCut : Cut image volumes along arbitrary surfaces</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/lucadellasantina/VolumeCut">View on GitHub</a>
+
+          <h2 id="project_title">VolumeCut</h2>
+          <h2 id="project_tagline">Cut image volumes along arbitrary surfaces</h2>
+        </header>
+    </div>
+
+
+    <section class="outer">
+        <div class="downloads inner">
+          <a class="zip_download_link" href="https://github.com/lucadellasantina/VolumeCut/releases/download/v2.0/VolumeCut.mlappinstall">Download VolumeCut v2.0</a>
+          <a class="zip_download_link" href="https://github.com/lucadellasantina/VolumeCut/releases">Release notes</a>
+          <a class="zip_download_link" href="https://github.com/lucadellasantina/VolumeCut/wiki">User manual</a>
+          <a class="zip_download_link" href="https://github.com/lucadellasantina/VolumeCut/issues">Report an issue</a>
+        </div>
+    </section>
+
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <div style="text-align:center"><h2>What is VolumeCut?</h2><img src ="images/app_icon.png"/></div>
+        <p>VolumeCut is a MATLAB® app that allows you to cut a volumetric image along arbitrary defined surfaces.</p>
+
+        <p>This software is developed for neuroscience research purposes, where it is able to segment regions of the nervous system along their physiological curvature.</p>
+
+        <div style="text-align:center"><img src ="images/logo_open_source.png" width="40%"/></div>
+
+        <p>VolumeCut is licensed under <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU General Public License v3.</a>
+        This strong copyleft license ensures you will always have the right to obtain, view and modify ObjectFinder's source code to review its functionality and improve its features.</p>
+
+        <p>We strongly believe that software developed for data analysis in scientific research must be open source, to ensure the highest level of reproducibility of your science.</p>
+
+        <div style="text-align:center"><h2>Runs on your favorite platform</h2></div>
+
+        <p>Whether your workstation relies on Microsoft Windows, macOS or Linux, VolumeCut can run on your computer since it relies only on core Matlab functions.</p>
+        <div style="text-align:center"><img src ="images/logo_platforms.png" width="75%"/></div>
+
+        Having a single code base for all platforms makes developing new features as well as fixing bugs a much faster and enjoyable journey.
+
+        <div style="text-align:center"><h2>Visually interact with your data</h2></div>
+
+        <p>ObjectFinder can display the interpolated surfaces in 3D in order to check quality before cutting the volume.</p>
+        <div style="text-align:center"><img src ="images/Screenshot_GUI.png" width="533px"/></div>
+
+        <p>Need to render your data in 3D? ObjectFinder can preview the cut volumes as well as the source volume using the internal 3D renderer.
+        <div style="text-align:center"><img src ="images/Screenshot_Renderer.png" width="570px"/></div>
+        <p>You can visually zoom, rotate and pan through the volume using your mouse.</p>
+
+        <div style="text-align:center"><h2>How do I install VolumeCut?</h2></div>
+
+        <div style="text-align:left">
+        <ol>
+          <li>Download latest VolumeCut version from the top of this page</li>
+          <li>Install VolumeCut using MATLAB's "Install App" button</li>
+          <li>Start VolumeCut from your Apps list.</li>
+          <div style="text-align:center"><img src ="images/Screenshot_MatlabApps.png" width="100%"/></div>
+       </ol>
+
+        <div style="text-align:center"><h2>System Requirements</h2></div>
+        <table width="100%">
+          <tr>
+            <td>Software:</td>
+            <td>Hardware (recommended):</td>
+          </tr>
+          <tr>
+            <td>
+              <ul style="list-style-type:none">
+                <li><a href="https://www.mathworks.com/products/matlab.html">MATLAB</a> R2018b or newer</li>
+                <li><a href="https://www.mathworks.com/products/image.html">Image Processing Toolbox</a></li>
+                <li><a href="http://www.bitplane.com/">Bitplane Imaris</a> to draw points in 3D (optional)</li>
+              </ul>
+            </td>
+            <td>
+              <ul style="list-style-type:none">
+                <li>CPU: Intel Xeon >2GHz</li>
+                <li>RAM: 32Gb</li>
+                <li>GPU: 2Gb VRAM for volume rendering</li>
+              </ul>
+            </td>
+          </tr>
+        </table>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <footer class="inner">
+      <div id="footer_wrap" class="outer">
+          <p class="copyright">VolumeCut is developed and maintained by <a href="https://github.com/lucadellasantina">Luca Della Santina</a>.</p>
+    <div class="downloads inner">
+      <a class="zip_download_link" href="http://github.com/lucadellasantina/VolumeCut/zipball/master/">Source code .zip</a>
+      <a class="tar_download_link" href="http://github.com/lucadellasantina/VolumeCut/tarball/master/">Source code .tar.gz</a>
+    </div>
+  </footer>
+  </body>
+</html>
