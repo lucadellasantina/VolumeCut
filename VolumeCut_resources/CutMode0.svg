@@ -14,8 +14,8 @@
    viewBox="0 0 48 48"
    version="1.1"
    id="svg8"
-   sodipodi:docname="CutMode1.svg"
-   inkscape:export-filename="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut_resources/48px-CutMode1.png"
+   sodipodi:docname="CutMode0.svg"
+   inkscape:export-filename="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut_resources/48px-CutMode0.png"
    inkscape:export-xdpi="25.4"
    inkscape:export-ydpi="25.4"
    inkscape:version="0.92.3 (2405546, 2018-03-11)">
@@ -92,49 +92,32 @@
        id="path863"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:#00ced1;fill-opacity:1;stroke:#000000;stroke-width:0.55869734;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 38.284555,262.44415 H 47.0459 l -15.481584,9.0279 H 0.98980071 L 5.8901856,268.64281 H 27.548171 l 10.736384,-6.19866"
-       id="path865"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccc" />
-    <path
        sodipodi:nodetypes="ccccccc"
        inkscape:connector-curvature="0"
        id="path884"
-       d="M 38.284555,275.45251 H 47.0459 L 31.564316,284.4804 H 0.98980071 L 5.8901856,281.65116 H 27.548171 l 10.736384,-6.19865"
+       d="M 38.284555,268.57333 H 47.0459 l -15.481584,9.02789 H 0.98980071 L 5.8901856,274.77198 H 27.548171 l 10.736384,-6.19865"
        style="fill:#48d1cc;fill-opacity:1;stroke:#000000;stroke-width:0.55869734;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.22829056px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.29564402"
-       x="15.656885"
-       y="265.68295"
+       x="15.678881"
+       y="269.38708"
        id="text888"><tspan
          sodipodi:role="line"
          id="tspan886"
-         x="15.656885"
-         y="265.68295"
+         x="15.678881"
+         y="269.38708"
          style="font-size:9.46060848px;stroke-width:0.29564402">I</tspan></text>
-    <text
-       id="text892"
-       y="292.88913"
-       x="13.033045"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.22829056px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.29564402"
-       xml:space="preserve"><tspan
-         style="font-size:9.46060848px;stroke-width:0.29564402"
-         y="292.88913"
-         x="13.033045"
-         id="tspan890"
-         sodipodi:role="line">III</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.22829056px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.29564402"
-       x="14.344965"
-       y="279.67471"
+       x="14.366961"
+       y="290.25803"
        id="text896"><tspan
          sodipodi:role="line"
          id="tspan894"
-         x="14.344965"
-         y="279.67471"
+         x="14.366961"
+         y="290.25803"
          style="font-size:9.46060848px;stroke-width:0.29564402">II</tspan></text>
   </g>
 </svg>

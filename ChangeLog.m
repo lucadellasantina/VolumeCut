@@ -20,6 +20,10 @@
 %
 % *Change log*
 %
+% _*Version 2.1*            created on 2018-10-09 by Luca Della Santina_
+%
+%  + Correct rendering of anisotropic voxels
+%
 % _*Version 2.0*            created on 2018-10-07 by Luca Della Santina_
 %
 %  + Added Graphical interface using appdesigner

@@ -17,68 +17,90 @@
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % This software is released under the terms of the GPL v3 software license
 %
-function [I1, I2, Mask1, Mask2] = cutVolume(I, mode, g1, g2, g3)
+function [I1, Mask1, I2, Mask2, I3, Mask3, I4, Mask4] = cutVolume(I, mode, g1, g2, g3)
 I1 = I;
 I2 = I;
+I3 = I;
+I4 = I;
 Mask1 = false(size(I));
 Mask2 = false(size(I));
+Mask3 = false(size(I));
+Mask4 = false(size(I));
 
 fprintf('Slicing the volume... ');
 switch mode
-    case 1
-        % Slice the image in two inside g1-g2 and outside g1-g2
+    case 0 % Slice image in two parts: Start-g1 and g1-End
         for x=1:size(I,1)
             for y=1:size(I,2)
                 for z=1:size(I,3)
                     if z < g1(ceil(x/2),ceil(y/2))
-                        I1(x,y,z)    = 0;
-                        Mask2(x,y,z) = true;
-                    end
-                    if z > g2(ceil(x/2),ceil(y/2))
-                        I1(x,y,z)    = 0;
-                        Mask2(x,y,z) = true;
-                    end
-                    if (z >= g1(ceil(x/2),ceil(y/2))) && (z <= g2(ceil(x/2),ceil(y/2)))
-                        I2(x,y,z)    = 0;
                         Mask1(x,y,z) = true;
+                        I2(x,y,z)    = 0;
+                    elseif z >= g1(ceil(x/2),ceil(y/2))
+                        I1(x,y,z)    = 0;
+                        Mask2(x,y,z) = true;
                     end
                 end
             end
         end
-    case 2
-        % Slice the image in two halves between volume start-g3 and g3-end
+    case 1 % Slice the image in three parts: Start-g1, g1-g2 and g2-End
         for x=1:size(I,1)
             for y=1:size(I,2)
                 for z=1:size(I,3)
-                    if z >= g3(ceil(x/2),ceil(y/2))
+                    if z < g1(ceil(x/2),ceil(y/2))
+                        Mask1(x,y,z) = true;
+                        I2(x,y,z)    = 0;
+                        I3(x,y,z)    = 0;
+                    elseif (z >= g1(ceil(x/2),ceil(y/2))) && (z <= g2(ceil(x/2),ceil(y/2)))
                         I1(x,y,z)    = 0;
                         Mask2(x,y,z) = true;
-                    else
+                        I3(x,y,z)    = 0;
+                    elseif z > g2(ceil(x/2),ceil(y/2))
+                        I1(x,y,z)    = 0;
                         I2(x,y,z)    = 0;
-                        Mask1(x,y,z) = true;
+                        Mask3(x,y,z) = true;
                     end
                 end
             end
         end
-    case 3
-        % Slice the image in two halves along the reference surface g1-g3 and g3-g2
+    case 2 % Slice the image in two parts between surfaces: Start-g3 and g3-End
         for x=1:size(I,1)
             for y=1:size(I,2)
                 for z=1:size(I,3)
-                    if z <= (g1(ceil(x/2),ceil(y/2)))
-                        I1(x,y,z)    = 0;
-                        Mask2(x,y,z) = true;
-                    end
-                    if z >= g3(ceil(x/2),ceil(y/2))
-                        I1(x,y,z)    = 0;
-                        Mask2(x,y,z) = true;
+                    if z < (g3(ceil(x/2),ceil(y/2)))
+                        Mask1(x,y,z) = true;
+                        I2(x,y,z)    = 0;
                     else
-                        I2(x,y,z)    = 0;
-                        Mask1(x,y,z) = true;
+                        I1(x,y,z)    = 0;
+                        Mask2(x,y,z) = true;
                     end
-                    if z >= (g2(ceil(x/2),ceil(y/2)))
-                        I2(x,y,z)    = 0;
+                end
+            end
+        end
+    case 3 % Slice the image in four parts: Start-g1, g1-g2, g2-g3 and g3-End
+        for x=1:size(I,1)
+            for y=1:size(I,2)
+                for z=1:size(I,3)
+                    if z < (g1(ceil(x/2),ceil(y/2)))
                         Mask1(x,y,z) = true;
+                        I2(x,y,z)    = 0;
+                        I3(x,y,z)    = 0;
+                        I4(x,y,z)    = 0;
+                    elseif (z >= g1(ceil(x/2),ceil(y/2))) && (z < g2(ceil(x/2),ceil(y/2)))
+                        I1(x,y,z)    = 0;
+                        Mask2(x,y,z) = true;
+                        I3(x,y,z)    = 0;
+                        I4(x,y,z)    = 0;                        
+                    elseif (z >= g2(ceil(x/2),ceil(y/2))) && (z < g3(ceil(x/2),ceil(y/2)))
+                        I1(x,y,z)    = 0;
+                        I2(x,y,z)    = 0;
+                        Mask3(x,y,z) = true;
+                        I4(x,y,z)    = 0;                        
+                    elseif z >= g3(ceil(x/2),ceil(y/2))
+                        I1(x,y,z)    = 0;
+                        I2(x,y,z)    = 0;
+                        I3(x,y,z)    = 0;
+                        Mask4(x,y,z) = true;                        
                     end
                 end
             end

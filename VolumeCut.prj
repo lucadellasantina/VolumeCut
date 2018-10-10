@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="584160124" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="1058475994" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
     <param.appname>VolumeCut</param.appname>
     <param.authnamewatermark>Luca Della Santina</param.authnamewatermark>
     <param.email>luca.dellasantina@gmail.com</param.email>
@@ -13,7 +13,7 @@
     <param.summary>Cut image volumes along arbitrary surfaces</param.summary>
     <param.description />
     <param.screenshot>${PROJECT_ROOT}/VolumeCut_resources/app_icon.png</param.screenshot>
-    <param.version>2.0</param.version>
+    <param.version>2.1</param.version>
     <param.products.name />
     <param.products.id />
     <param.products.version />
@@ -33,6 +33,7 @@
       <file>${PROJECT_ROOT}/VolumeCut.mlapp</file>
     </fileset.main>
     <fileset.depfun>
+      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-CutMode0.png</file>
       <file>${PROJECT_ROOT}/VolumeCut_resources/48px-CutMode1.png</file>
       <file>${PROJECT_ROOT}/VolumeCut_resources/48px-CutMode2.png</file>
       <file>${PROJECT_ROOT}/VolumeCut_resources/48px-CutMode3.png</file>
