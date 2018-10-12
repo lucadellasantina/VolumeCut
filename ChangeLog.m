@@ -20,6 +20,15 @@
 %
 % *Change log*
 %
+% _*Version 2.3*            created on 2018-10-12 by Luca Della Santina_
+%
+%  + Keep track on screen of file names of image and cut reference points 
+%  + Automatically change matlab current working directory to Image file's
+%  + Allows reuse of calculated surfaces to cut additional image stacks
+%  + Units of measurements can be switched from pixels to microns
+%  + Render volume generated a new plot every time is pressed
+%  + Render window's title matches the type of rendered content(e.g Cut I)
+%
 % _*Version 2.2*            created on 2018-10-11 by Luca Della Santina_
 %
 %  + 3D Rendering of reference points and fitted surfaces 
