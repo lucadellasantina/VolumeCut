@@ -20,9 +20,15 @@
 %
 % *Change log*
 %
+% _*Version 2.2*            created on 2018-10-11 by Luca Della Santina_
+%
+%  + 3D Rendering of reference points and fitted surfaces 
+%  + MIP projections on the walls of the 3D scene
+%
 % _*Version 2.1*            created on 2018-10-09 by Luca Della Santina_
 %
 %  + Correct rendering of anisotropic voxels
+%  + New cut modes: Cut in Two/Three/Four parts
 %
 % _*Version 2.0*            created on 2018-10-07 by Luca Della Santina_
 %
