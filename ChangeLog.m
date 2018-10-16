@@ -20,6 +20,13 @@
 %
 % *Change log*
 %
+% _*Version 3.0*            created on 2018-10-16 by Luca Della Santina_
+%
+%  + New Mask visualization and math functions
+%  + Scroll wheel in mask tab moves current Z plane visualized
+%  + Logical operations between masks: unite, exclude, subtract, intersect
+%  + Operations on mask: Revert to original, trace edges, invert
+%
 % _*Version 2.3*            created on 2018-10-12 by Luca Della Santina_
 %
 %  + Keep track on screen of file names of image and cut reference points 

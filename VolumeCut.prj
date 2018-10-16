@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="1339578077" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="2347407039" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
     <param.appname>VolumeCut</param.appname>
     <param.authnamewatermark>Luca Della Santina</param.authnamewatermark>
     <param.email>luca.dellasantina@gmail.com</param.email>
@@ -13,7 +13,7 @@
     <param.summary>Cut image volumes along arbitrary surfaces</param.summary>
     <param.description />
     <param.screenshot>${PROJECT_ROOT}/VolumeCut_resources/app_icon.png</param.screenshot>
-    <param.version>2.3</param.version>
+    <param.version>3.0</param.version>
     <param.products.name />
     <param.products.id />
     <param.products.version />
@@ -40,10 +40,19 @@
       <file>${PROJECT_ROOT}/VolumeCut_resources/48px-Edit-cut.png</file>
       <file>${PROJECT_ROOT}/VolumeCut_resources/48px-Image_upload.png</file>
       <file>${PROJECT_ROOT}/VolumeCut_resources/48px-Mypaint-icon.png</file>
+      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-logical-contour.png</file>
+      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-logical-exclusion.png</file>
+      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-logical-intersection.png</file>
+      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-logical-invert.png</file>
+      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-logical-operations.png</file>
+      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-logical-unite.png</file>
+      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-open-mask.png</file>
       <file>${PROJECT_ROOT}/VolumeCut_resources/48px-preview-photos.png</file>
       <file>${PROJECT_ROOT}/VolumeCut_resources/48px-refresh.png</file>
       <file>${PROJECT_ROOT}/VolumeCut_resources/48px-save-image.png</file>
+      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-save-mask.png</file>
       <file>${PROJECT_ROOT}/VolumeCut_resources/48px-surface.png</file>
+      <file>${PROJECT_ROOT}/VolumeCut_resources/48pxlogical-difference.png</file>
       <file>${PROJECT_ROOT}/VolumeCut_resources/app_icon.png</file>
       <file>${PROJECT_ROOT}/cutVolume.m</file>
       <file>${PROJECT_ROOT}/gridfit.m</file>
