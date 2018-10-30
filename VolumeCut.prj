@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="2347407039" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="1015364140" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
     <param.appname>VolumeCut</param.appname>
     <param.authnamewatermark>Luca Della Santina</param.authnamewatermark>
     <param.email>luca.dellasantina@gmail.com</param.email>
@@ -33,33 +33,15 @@
       <file>${PROJECT_ROOT}/VolumeCut.mlapp</file>
     </fileset.main>
     <fileset.depfun>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-CutMode0.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-CutMode1.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-CutMode2.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-CutMode3.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-Edit-cut.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-Image_upload.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-Mypaint-icon.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-logical-contour.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-logical-exclusion.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-logical-intersection.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-logical-invert.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-logical-operations.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-logical-unite.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-open-mask.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-preview-photos.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-refresh.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-save-image.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-save-mask.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48px-surface.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/48pxlogical-difference.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/app_icon.png</file>
       <file>${PROJECT_ROOT}/cutVolume.m</file>
       <file>${PROJECT_ROOT}/gridfit.m</file>
       <file>${PROJECT_ROOT}/loadImage.m</file>
       <file>${PROJECT_ROOT}/saveastiff.m</file>
     </fileset.depfun>
-    <fileset.resources />
+    <fileset.resources>
+      <file>${PROJECT_ROOT}/ImarisXTensions</file>
+      <file>${PROJECT_ROOT}/VolumeCut_resources</file>
+    </fileset.resources>
     <fileset.package />
     <build-deliverables>
       <file location="/home/luca/Dropbox/MATLAB scripts" name="VolumeCut" optional="false">/home/luca/Dropbox/MATLAB scripts/VolumeCut</file>
@@ -91,7 +73,7 @@
       <vista>false</vista>
       <linux>true</linux>
       <solaris>false</solaris>
-      <osver>4.15.0-36-generic</osver>
+      <osver>4.15.0-38-generic</osver>
       <os32>false</os32>
       <os64>true</os64>
       <arch>glnxa64</arch>
