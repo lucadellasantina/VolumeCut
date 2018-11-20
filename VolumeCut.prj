@@ -1,28 +1,27 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="1015364140" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="1549113389" file="D:\Dropbox\MATLAB scripts\VolumeCut\VolumeCut.prj" location="D:\Dropbox\MATLAB scripts\VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
     <param.appname>VolumeCut</param.appname>
     <param.authnamewatermark>Luca Della Santina</param.authnamewatermark>
     <param.email>luca.dellasantina@gmail.com</param.email>
     <param.company />
-    <param.icon>${PROJECT_ROOT}/VolumeCut_resources/icon_24.png</param.icon>
+    <param.icon>${PROJECT_ROOT}\VolumeCut_resources\icon_24.png</param.icon>
     <param.icons>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/icon_48.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/icon_24.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/icon_16.png</file>
+      <file>${PROJECT_ROOT}\VolumeCut_resources\icon_48.png</file>
+      <file>${PROJECT_ROOT}\VolumeCut_resources\icon_24.png</file>
+      <file>${PROJECT_ROOT}\VolumeCut_resources\icon_16.png</file>
     </param.icons>
     <param.summary>Cut image volumes along arbitrary surfaces</param.summary>
-    <param.description />
-    <param.screenshot>${PROJECT_ROOT}/VolumeCut_resources/app_icon.png</param.screenshot>
-    <param.version>3.0</param.version>
+    <param.description>Copyright 2017-2018 Luca Della Santina</param.description>
+    <param.screenshot>${PROJECT_ROOT}\VolumeCut_resources\app_icon.png</param.screenshot>
+    <param.version>3.1</param.version>
     <param.products.name />
     <param.products.id />
     <param.products.version />
     <param.platforms />
-    <param.output>/home/luca/Dropbox/MATLAB scripts/VolumeCut</param.output>
+    <param.output>D:\Dropbox\MATLAB scripts\VolumeCut</param.output>
     <param.guid>cfb0a967-521e-4ce0-aad1-9580c2f8ad52</param.guid>
     <unset>
       <param.company />
-      <param.description />
       <param.products.name />
       <param.products.id />
       <param.products.version />
@@ -30,25 +29,25 @@
       <param.output />
     </unset>
     <fileset.main>
-      <file>${PROJECT_ROOT}/VolumeCut.mlapp</file>
+      <file>${PROJECT_ROOT}\VolumeCut.mlapp</file>
     </fileset.main>
     <fileset.depfun>
-      <file>${PROJECT_ROOT}/cutVolume.m</file>
-      <file>${PROJECT_ROOT}/gridfit.m</file>
-      <file>${PROJECT_ROOT}/loadImage.m</file>
-      <file>${PROJECT_ROOT}/saveastiff.m</file>
+      <file>${PROJECT_ROOT}\cutVolume.m</file>
+      <file>${PROJECT_ROOT}\gridfit.m</file>
+      <file>${PROJECT_ROOT}\loadImage.m</file>
+      <file>${PROJECT_ROOT}\saveastiff.m</file>
     </fileset.depfun>
     <fileset.resources>
-      <file>${PROJECT_ROOT}/ImarisXTensions</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources</file>
+      <file>${PROJECT_ROOT}\ImarisXTensions</file>
+      <file>${PROJECT_ROOT}\VolumeCut_resources</file>
     </fileset.resources>
     <fileset.package />
     <build-deliverables>
-      <file location="/home/luca/Dropbox/MATLAB scripts" name="VolumeCut" optional="false">/home/luca/Dropbox/MATLAB scripts/VolumeCut</file>
+      <file location="D:\Dropbox\MATLAB scripts" name="VolumeCut" optional="false">D:\Dropbox\MATLAB scripts\VolumeCut</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/home/luca/MATLAB/R2018b</root>
+      <root>C:\Program Files\MATLAB\R2018b</root>
       <toolboxes>
         <toolbox name="matlabcoder" />
         <toolbox name="neuralnetwork" />
@@ -65,18 +64,18 @@
       </toolbox>
     </matlab>
     <platform>
-      <unix>true</unix>
+      <unix>false</unix>
       <mac>false</mac>
-      <windows>false</windows>
+      <windows>true</windows>
       <win2k>false</win2k>
       <winxp>false</winxp>
       <vista>false</vista>
-      <linux>true</linux>
+      <linux>false</linux>
       <solaris>false</solaris>
-      <osver>4.15.0-38-generic</osver>
+      <osver>10.0</osver>
       <os32>false</os32>
       <os64>true</os64>
-      <arch>glnxa64</arch>
+      <arch>win64</arch>
       <matlab>true</matlab>
     </platform>
   </configuration>
