@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="48mm"
+   height="48mm"
+   viewBox="0 0 48 48"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="logical-Ultierode.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:export-filename="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut_resources/48px-logical-Ultierode.png"
+   inkscape:export-xdpi="25.4"
+   inkscape:export-ydpi="25.4">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="4.5640624"
+     inkscape:cx="42.534193"
+     inkscape:cy="80.092856"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1853"
+     inkscape:window-height="1016"
+     inkscape:window-x="67"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-249)">
+    <path
+       style="opacity:1;fill:#b0c4de;fill-opacity:1;stroke:#000000;stroke-width:2.757828;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 90.324219,4.5449219 A 86.239504,86.239504 0 0 0 4.0839844,90.783203 86.239504,86.239504 0 0 0 90.324219,177.02344 86.239504,86.239504 0 0 0 176.5625,90.783203 86.239504,86.239504 0 0 0 90.324219,4.5449219 Z"
+       transform="matrix(0.26458333,0,0,0.26458333,0,249)"
+       id="path818" />
+    <path
+       style="opacity:1;fill:#b0c4de;fill-opacity:1;stroke:#000000;stroke-width:2.75782803;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:2.75782803, 2.75782803000000021;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 63.056641,32.417969 a 32.957272,58.520601 0 0 1 28.736328,30.013672 47.772328,35.84278 26.658666 0 1 29.794921,6.390625 47.772328,35.84278 26.658666 0 1 26.61328,53.466794 47.772328,35.84278 26.658666 0 1 -58.775389,10.59766 47.772328,35.84278 26.658666 0 1 -2.630859,-1.44727 A 32.957272,58.520601 0 0 1 63.056641,149.45898 32.957272,58.520601 0 0 1 30.099609,90.939453 32.957272,58.520601 0 0 1 63.056641,32.417969 Z"
+       transform="matrix(0.26458333,0,0,0.26458333,0,249)"
+       id="path10" />
+    <path
+       style="fill:#000000;fill-opacity:1;stroke-width:0.35524037;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.35524037, 0.35524037;stroke-dashoffset:0;paint-order:fill markers stroke"
+       id="path817"
+       sodipodi:type="arc"
+       sodipodi:cx="22.698238"
+       sodipodi:cy="274.20514"
+       sodipodi:rx="2.2655501"
+       sodipodi:ry="2.4297204"
+       sodipodi:start="0"
+       sodipodi:end="6.2829424"
+       sodipodi:open="true"
+       d="m 24.963789,274.20514 a 2.2655501,2.4297204 0 0 1 -2.265413,2.42972 2.2655501,2.4297204 0 0 1 -2.265688,-2.42943 2.2655501,2.4297204 0 0 1 2.265138,-2.43001 2.2655501,2.4297204 0 0 1 2.265962,2.42913" />
+  </g>
+</svg>
