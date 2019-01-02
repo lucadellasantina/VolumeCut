@@ -20,6 +20,10 @@
 %
 % *Change log*
 %
+% _*Version 3.3*            created on 2019-01-02 by Luca Della Santina_
+%
+% Changed imclose and imfill to operate in 3D by iterating each plane in 2D
+%
 % _*Version 3.0*            created on 2018-10-16 by Luca Della Santina_
 %
 %  + New Mask visualization and math functions

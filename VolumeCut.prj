@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="1370419896" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="3146036020" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
     <param.appname>VolumeCut</param.appname>
     <param.authnamewatermark>Luca Della Santina</param.authnamewatermark>
     <param.email>luca.dellasantina@gmail.com</param.email>
@@ -13,7 +13,7 @@
     <param.summary>Cut image volumes along arbitrary surfaces</param.summary>
     <param.description>Copyright 2017-2018 Luca Della Santina</param.description>
     <param.screenshot>${PROJECT_ROOT}/VolumeCut_resources/app_icon.png</param.screenshot>
-    <param.version>3.2</param.version>
+    <param.version>3.3</param.version>
     <param.products.name />
     <param.products.id />
     <param.products.version />
@@ -32,6 +32,7 @@
       <file>${PROJECT_ROOT}/VolumeCut.mlapp</file>
     </fileset.main>
     <fileset.depfun>
+      <file>/home/luca/Dropbox/MATLAB scripts/ObjectFinder/ObjectFinder_resources/48px-Image_upload.png</file>
       <file>${PROJECT_ROOT}/cutVolume.m</file>
       <file>${PROJECT_ROOT}/gridfit.m</file>
       <file>${PROJECT_ROOT}/loadImage.m</file>
@@ -72,7 +73,7 @@
       <vista>false</vista>
       <linux>true</linux>
       <solaris>false</solaris>
-      <osver>4.15.0-42-generic</osver>
+      <osver>4.15.0-43-generic</osver>
       <os32>false</os32>
       <os64>true</os64>
       <arch>glnxa64</arch>
