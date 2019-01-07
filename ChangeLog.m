@@ -1,5 +1,5 @@
 %% VolumeCut: Cut images along custom surfaces
-% Copyright (C) 2017,2018 Luca Della Santina
+% Copyright (C) 2017-2019 Luca Della Santina
 %
 %  This file is part of VolumeCut
 %
@@ -17,8 +17,18 @@
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % This software is released under the terms of the GPL v3 software license
 %
+
 %
 % *Change log*
+%
+% _*Version 4.0*            created on 2019-01-06 by Luca Della Santina_
+%
+%  + Skeleton tab allows visualization of digital skeletons
+%  + Support for skeletons created with ImageJ's Simple Neurite Tracer
+%  + Create binary mask from skeleton according to skeleton's radius
+%  + Reflect skeletons along the cardinal axis of the containing volume
+%  + Recalibrate and Rescale skeleton
+%  + Display skeleton statistics
 %
 % _*Version 3.3*            created on 2019-01-02 by Luca Della Santina_
 %

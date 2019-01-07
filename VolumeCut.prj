@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="3146036020" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="2449778544" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
     <param.appname>VolumeCut</param.appname>
     <param.authnamewatermark>Luca Della Santina</param.authnamewatermark>
     <param.email>luca.dellasantina@gmail.com</param.email>
@@ -11,9 +11,9 @@
       <file>${PROJECT_ROOT}/VolumeCut_resources/icon_16.png</file>
     </param.icons>
     <param.summary>Cut image volumes along arbitrary surfaces</param.summary>
-    <param.description>Copyright 2017-2018 Luca Della Santina</param.description>
+    <param.description>Copyright 2017-2019 Luca Della Santina</param.description>
     <param.screenshot>${PROJECT_ROOT}/VolumeCut_resources/app_icon.png</param.screenshot>
-    <param.version>3.3</param.version>
+    <param.version>4.0</param.version>
     <param.products.name />
     <param.products.id />
     <param.products.version />
@@ -32,11 +32,16 @@
       <file>${PROJECT_ROOT}/VolumeCut.mlapp</file>
     </fileset.main>
     <fileset.depfun>
+      <file>/home/luca/Dropbox/MATLAB scripts/Clarinet/Clarinet_resources/48px-info.png</file>
       <file>/home/luca/Dropbox/MATLAB scripts/ObjectFinder/ObjectFinder_resources/48px-Image_upload.png</file>
+      <file>/home/luca/Dropbox/MATLAB scripts/ObjectFinder/ObjectFinder_resources/48px-Masks.png</file>
       <file>${PROJECT_ROOT}/cutVolume.m</file>
+      <file>${PROJECT_ROOT}/editStruct.m</file>
       <file>${PROJECT_ROOT}/gridfit.m</file>
       <file>${PROJECT_ROOT}/loadImage.m</file>
       <file>${PROJECT_ROOT}/saveastiff.m</file>
+      <file>${PROJECT_ROOT}/skel2mask.m</file>
+      <file>${PROJECT_ROOT}/snt2ml.m</file>
     </fileset.depfun>
     <fileset.resources>
       <file>${PROJECT_ROOT}/ImarisXTensions</file>
