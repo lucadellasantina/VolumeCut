@@ -21,6 +21,15 @@
 %
 % *Change log*
 %
+% _*Version 4.2*            created on 2019-01-16 by Luca Della Santina_
+%
+%  + Fixed error of Spots not recognized when only one set is loaded
+%  + Fixed error of 3D plot not visualized due to mispositioned hold(on)
+%
+% _*Version 4.1*            created on 2019-01-09 by Luca Della Santina_
+%
+%  + Inverted x y coordinates when importing skeletons from SNT .traces
+%
 % _*Version 4.0*            created on 2019-01-06 by Luca Della Santina_
 %
 %  + Skeleton tab allows visualization of digital skeletons

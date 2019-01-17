@@ -103,7 +103,10 @@ while ~isempty(tmpNode)
                 tmpPos.r = 0;
 
                 i = i+1;
-                tmpBranch.points(i, :)= [tmpPos.x, tmpPos.y, tmpPos.z, tmpPos.xd, tmpPos.yd, tmpPos.zd, tmpPos.r];
+                % x and y positions are inverted in the file as
+                % compare to original image stacks, inverting here
+                % their positions in the final vector
+                tmpBranch.points(i, :)= [tmpPos.y, tmpPos.x, tmpPos.z, tmpPos.yd, tmpPos.xd, tmpPos.zd, tmpPos.r];
             end
             tmpPoint = tmpPoint.getNextSibling;
         end
@@ -203,7 +206,10 @@ while ~isempty(tmpNode)
                         tmpPos.r  = str2double(tmpPoint.getAttributes.getNamedItem('r').getNodeValue);
                         
                         j = j+1;
-                        tmpBranch.points(j, :)= [tmpPos.x, tmpPos.y, tmpPos.z, tmpPos.xd, tmpPos.yd, tmpPos.zd, tmpPos.r];
+                        % x and y positions are inverted in the file as
+                        % compare to original image stacks, inverting here
+                        % their positions in the final vector
+                        tmpBranch.points(j, :)= [tmpPos.y, tmpPos.x, tmpPos.z, tmpPos.yd, tmpPos.xd, tmpPos.zd, tmpPos.r];
                     end
                     tmpPoint = tmpPoint.getNextSibling;
                 end
