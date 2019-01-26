@@ -21,7 +21,15 @@
 %
 % *Change log*
 %
-% _*Version 4.2*            created on 2019-01-16 by Luca Della Santina_
+% _*Version 4.4*            created on 2019-01-26 by Luca Della Santina_ 
+%
+%  + New Automation tab allows batch processing of masks
+%
+% _*Version 4.3*            created on 2019-01-23 by Luca Della Santina_ 
+%
+%  + Fixed bug causing missing interactivity with 3D plots
+%
+%_*Version 4.2*            created on 2019-01-16 by Luca Della Santina_
 %
 %  + Fixed error of Spots not recognized when only one set is loaded
 %  + Fixed error of 3D plot not visualized due to mispositioned hold(on)

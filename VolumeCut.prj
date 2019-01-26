@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="130734146" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="2332126283" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
     <param.appname>VolumeCut</param.appname>
     <param.authnamewatermark>Luca Della Santina</param.authnamewatermark>
     <param.email>luca.dellasantina@gmail.com</param.email>
@@ -13,7 +13,7 @@
     <param.summary>Cut image volumes along arbitrary surfaces</param.summary>
     <param.description>Copyright 2017-2019 Luca Della Santina</param.description>
     <param.screenshot>${PROJECT_ROOT}/VolumeCut_resources/app_icon.png</param.screenshot>
-    <param.version>4.3</param.version>
+    <param.version>4.4</param.version>
     <param.products.name />
     <param.products.id />
     <param.products.version />
@@ -33,10 +33,11 @@
     </fileset.main>
     <fileset.depfun>
       <file>/home/luca/Dropbox/MATLAB scripts/Clarinet/Clarinet_resources/48px-info.png</file>
+      <file>/home/luca/Dropbox/MATLAB scripts/Clarinet/editStruct.m</file>
+      <file>/home/luca/Dropbox/MATLAB scripts/ObjectFinder/ObjectFinder_resources/48px-HomeFolder.png</file>
       <file>/home/luca/Dropbox/MATLAB scripts/ObjectFinder/ObjectFinder_resources/48px-Image_upload.png</file>
       <file>/home/luca/Dropbox/MATLAB scripts/ObjectFinder/ObjectFinder_resources/48px-Masks.png</file>
       <file>${PROJECT_ROOT}/cutVolume.m</file>
-      <file>${PROJECT_ROOT}/editStruct.m</file>
       <file>${PROJECT_ROOT}/gridfit.m</file>
       <file>${PROJECT_ROOT}/loadImage.m</file>
       <file>${PROJECT_ROOT}/saveastiff.m</file>
