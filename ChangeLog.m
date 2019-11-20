@@ -21,6 +21,10 @@
 %
 % *Change log*
 %
+% _*Version 4.5*            created on 2019-11-20 by Luca Della Santina_ 
+%
+%  + New Automation option to calculate voxel "Density by depth" percentage
+%
 % _*Version 4.4*            created on 2019-01-26 by Luca Della Santina_ 
 %
 %  + New Automation tab allows batch processing of masks
