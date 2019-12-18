@@ -21,6 +21,12 @@
 %
 % *Change log*
 %
+% _*Version 4.5*            created on 2019-12-18 by Luca Della Santina_ 
+%
+%  + New Automation option to intensity histograms within masked volume
+%  + App now starts centered within the screen
+%  + During batch processing a cancellable progressbar informs of status
+%
 % _*Version 4.5*            created on 2019-11-20 by Luca Della Santina_ 
 %
 %  + New Automation option to calculate voxel "Density by depth" percentage

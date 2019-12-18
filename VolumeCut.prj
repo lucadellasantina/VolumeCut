@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="1246905467" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="1247348108" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
     <param.appname>VolumeCut</param.appname>
     <param.authnamewatermark>Luca Della Santina</param.authnamewatermark>
     <param.email>luca.dellasantina@gmail.com</param.email>
@@ -11,10 +11,10 @@
       <file>${PROJECT_ROOT}/VolumeCut_resources/icon_16.png</file>
     </param.icons>
     <param.summary>Cut image volumes along arbitrary surfaces</param.summary>
-    <param.description>Copyright 2017-2018 Luca Della Santina
+    <param.description>Copyright 2017-2020 Luca Della Santina
 Licensed under the term of GPL v3</param.description>
-    <param.screenshot>/tmp/tpffcff0d7_468b_42d0_ad10_2bcc445495f3.png</param.screenshot>
-    <param.version>1.0</param.version>
+    <param.screenshot>/tmp/tp565f37e9_69bc_4095_bd1b_d90836ce96e8.png</param.screenshot>
+    <param.version>4.6</param.version>
     <param.products.name />
     <param.products.id />
     <param.products.version />
@@ -25,7 +25,6 @@ Licensed under the term of GPL v3</param.description>
       <param.authnamewatermark />
       <param.email />
       <param.company />
-      <param.version />
       <param.products.name />
       <param.products.id />
       <param.products.version />
@@ -83,7 +82,7 @@ Licensed under the term of GPL v3</param.description>
       <vista>false</vista>
       <linux>true</linux>
       <solaris>false</solaris>
-      <osver>5.3.0-23-generic</osver>
+      <osver>5.3.0-24-generic</osver>
       <os32>false</os32>
       <os64>true</os64>
       <arch>glnxa64</arch>
