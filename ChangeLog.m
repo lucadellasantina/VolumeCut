@@ -21,6 +21,10 @@
 %
 % *Change log*
 %
+% _*Version 4.7*            created on 2020-01-31 by Luca Della Santina_ 
+%
+%  + Support for 2D binary masks
+%
 % _*Version 4.5*            created on 2019-12-18 by Luca Della Santina_ 
 %
 %  + New Automation option to intensity histograms within masked volume
