@@ -21,6 +21,11 @@
 %
 % *Change log*
 %
+% _*Version 4.7*            created on 2020-04-13 by Luca Della Santina_ 
+%
+%  + Version in app title
+%  + New Batch operation: Keep only largest object
+%
 % _*Version 4.7*            created on 2020-01-31 by Luca Della Santina_ 
 %
 %  + Support for 2D binary masks
