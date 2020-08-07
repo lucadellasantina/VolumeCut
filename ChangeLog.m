@@ -21,7 +21,11 @@
 %
 % *Change log*
 %
-% _*Version 4.7*            created on 2020-04-13 by Luca Della Santina_ 
+% _*Version 4.9*            created on 2020-08-07 by Luca Della Santina_ 
+%
+%  + Batch recursion into all subfolder levels
+%
+% _*Version 4.8*            created on 2020-04-13 by Luca Della Santina_ 
 %
 %  + Version in app title
 %  + New Batch operation: Keep only largest object

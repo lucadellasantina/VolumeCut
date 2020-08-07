@@ -1,8 +1,8 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="3145897261" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="2765450274" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
     <param.appname>VolumeCut</param.appname>
     <param.authnamewatermark>Luca Della Santina</param.authnamewatermark>
-    <param.email>luca.dellasantina@gmail.com</param.email>
+    <param.email />
     <param.company />
     <param.icon>${PROJECT_ROOT}/VolumeCut_resources/icon_24.png</param.icon>
     <param.icons>
@@ -12,9 +12,9 @@
     </param.icons>
     <param.summary>Cut image volumes along arbitrary surfaces</param.summary>
     <param.description>Copyright 2017-2020 Luca Della Santina
-Licensed under the term of GPL v3</param.description>
-    <param.screenshot>/tmp/tp6fad1349_46bc_4e93_90bf_591424d0f1b8.png</param.screenshot>
-    <param.version>4.7</param.version>
+Licensed under the terms of GPL v3</param.description>
+    <param.screenshot>/tmp/tp26374c42_dc2d_47fd_810c_fe35a9832df7.png</param.screenshot>
+    <param.version>4.9</param.version>
     <param.products.name>
       <item>MATLAB</item>
       <item>Image Processing Toolbox</item>
@@ -24,14 +24,13 @@ Licensed under the term of GPL v3</param.description>
       <item>17</item>
     </param.products.id>
     <param.products.version>
-      <item>9.7</item>
-      <item>11.0</item>
+      <item>9.8</item>
+      <item>11.1</item>
     </param.products.version>
     <param.platforms />
     <param.output>${PROJECT_ROOT}</param.output>
     <param.guid>cfb0a967-521e-4ce0-aad1-9580c2f8ad52</param.guid>
     <unset>
-      <param.authnamewatermark />
       <param.email />
       <param.company />
       <param.platforms />
@@ -41,6 +40,7 @@ Licensed under the term of GPL v3</param.description>
       <file>${PROJECT_ROOT}/VolumeCut.mlapp</file>
     </fileset.main>
     <fileset.depfun>
+      <file>${PROJECT_ROOT}/Skel2Graph3D.m</file>
       <file>${PROJECT_ROOT}/cutVolume.m</file>
       <file>${PROJECT_ROOT}/editStruct.m</file>
       <file>${PROJECT_ROOT}/gridfit.m</file>
@@ -59,7 +59,7 @@ Licensed under the term of GPL v3</param.description>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/home/luca/MATLAB/R2019b</root>
+      <root>/home/luca/MATLAB/R2020a</root>
       <toolboxes>
         <toolbox name="matlabcoder" />
         <toolbox name="neuralnetwork" />
@@ -84,7 +84,7 @@ Licensed under the term of GPL v3</param.description>
       <vista>false</vista>
       <linux>true</linux>
       <solaris>false</solaris>
-      <osver>5.3.0-29-generic</osver>
+      <osver>5.4.0-42-generic</osver>
       <os32>false</os32>
       <os64>true</os64>
       <arch>glnxa64</arch>
