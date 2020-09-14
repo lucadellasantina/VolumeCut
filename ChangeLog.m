@@ -21,6 +21,12 @@
 %
 % *Change log*
 %
+% _*Version 5.0*            created on 2020-09-14 by Luca Della Santina_ 
+%
+%  + Visual editor for fiducial cut points
+%  + Removed Log and Lamp component at the bottom of UI
+%  + Added progress dialogs for all operations
+%
 % _*Version 4.9*            created on 2020-08-07 by Luca Della Santina_ 
 %
 %  + Batch recursion into all subfolder levels
