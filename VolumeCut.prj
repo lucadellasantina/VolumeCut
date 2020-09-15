@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="450805270" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="3829748756" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
     <param.appname>VolumeCut</param.appname>
     <param.authnamewatermark>Luca Della Santina</param.authnamewatermark>
     <param.email />
@@ -13,8 +13,8 @@
     <param.summary>Cut image volumes along arbitrary surfaces</param.summary>
     <param.description>Copyright 2017-2020 Luca Della Santina
 Licensed under the term of GPL v3</param.description>
-    <param.screenshot>/tmp/tp6b9c4b36_a13f_45d6_bbd4_45541cf2fa4f.png</param.screenshot>
-    <param.version>5.0</param.version>
+    <param.screenshot>/tmp/tp0c8c39bb_7de3_4006_8bf6_fc3f84df506f.png</param.screenshot>
+    <param.version>5.1</param.version>
     <param.products.name>
       <item>MATLAB</item>
       <item>Image Processing Toolbox</item>
@@ -46,7 +46,7 @@ Licensed under the term of GPL v3</param.description>
       <file>${PROJECT_ROOT}/cutVolume.m</file>
       <file>${PROJECT_ROOT}/editStruct.m</file>
       <file>${PROJECT_ROOT}/gridfit.m</file>
-      <file>${PROJECT_ROOT}/loadImage.m</file>
+      <file>${PROJECT_ROOT}/loadImageStack.m</file>
       <file>${PROJECT_ROOT}/markVolume2D.m</file>
       <file>${PROJECT_ROOT}/saveastiff.m</file>
       <file>${PROJECT_ROOT}/skel2mask.m</file>

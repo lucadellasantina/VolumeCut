@@ -21,6 +21,12 @@
 %
 % *Change log*
 %
+% _*Version 5.1*            created on 2020-09-15 by Luca Della Santina_ 
+%
+%  + Optional saving of different cut parts
+%  + Delete objects from graphical editor
+%  + Renamed loadImage.m to loadImageStack.m to disambiguate among apps
+%
 % _*Version 5.0*            created on 2020-09-14 by Luca Della Santina_ 
 %
 %  + Visual editor for fiducial cut points

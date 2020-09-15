@@ -51,16 +51,17 @@ function Dots = markVolume2D(I, Dots)
     chkShowObjects  = uicontrol('Style','checkbox'  ,'Units','normalized','position',[.912,.830,.085,.02],'String','Show (spacebar)', 'Value',1,'Callback',@chkShowObjects_changed);
     chkShowAllZ     = uicontrol('Style','checkbox'  ,'Units','normalized','position',[.912,.790,.085,.02],'String','Ignore Z (Z)', 'Value',1,'Callback',@chkShowAllZ_changed);
     lstDots         = uicontrol('Style','listbox'   ,'Units','normalized','position',[.907,.530,.085,.25],'String',[],'Callback',@lstDots_valueChanged);
+    btnDelete       = uicontrol('Style','Pushbutton','Units','normalized','position',[.907,.480,.088,.04],'String','Delete Item (d)','Callback',@btnDelete_clicked); %#ok, unused variable
 
-    txtValidObjs    = uicontrol('Style','text'      ,'Units','normalized','position',[.907,.490,.085,.02],'String',['Total: ' num2str(size(Dots,3))]);
-    txtSelObj       = uicontrol('Style','text'      ,'Units','normalized','position',[.907,.460,.085,.02],'String','Selected Object info'); %#ok, unused variable
-    txtSelObjID     = uicontrol('Style','text'      ,'Units','normalized','position',[.907,.430,.085,.02],'String','ID# :');
-    txtSelObjPos    = uicontrol('Style','text'      ,'Units','normalized','position',[.907,.400,.085,.02],'String','Pos : ');
-    txtSelObjPix    = uicontrol('Style','text'      ,'Units','normalized','position',[.907,.370,.085,.02],'String','Voxels : ');
+    txtValidObjs    = uicontrol('Style','text'      ,'Units','normalized','position',[.907,.440,.085,.02],'String',['Total: ' num2str(size(Dots,3))]);
+    txtSelObj       = uicontrol('Style','text'      ,'Units','normalized','position',[.907,.410,.085,.02],'String','Selected Object info'); %#ok, unused variable
+    txtSelObjID     = uicontrol('Style','text'      ,'Units','normalized','position',[.907,.380,.085,.02],'String','ID# :');
+    txtSelObjPos    = uicontrol('Style','text'      ,'Units','normalized','position',[.907,.350,.085,.02],'String','Pos : ');
+    txtSelObjPix    = uicontrol('Style','text'      ,'Units','normalized','position',[.907,.320,.085,.02],'String','Voxels : ');
 
-    txtZoom         = uicontrol('Style','text'      ,'Units','normalized','position',[.925,.310,.050,.02],'String','Zoom level:'); %#ok, unused variable
-    btnZoomOut      = uicontrol('Style','Pushbutton','Units','normalized','position',[.920,.250,.030,.05],'String','-'                              ,'Callback',@btnZoomOut_clicked); %#ok, unused variable
-    btnZoomIn       = uicontrol('Style','Pushbutton','Units','normalized','position',[.950,.250,.030,.05],'String','+'                              ,'Callback',@btnZoomIn_clicked); %#ok, unused variable
+    txtZoom         = uicontrol('Style','text'      ,'Units','normalized','position',[.925,.290,.050,.02],'String','Zoom level:'); %#ok, unused variable
+    btnZoomOut      = uicontrol('Style','Pushbutton','Units','normalized','position',[.920,.230,.030,.05],'String','-'                              ,'Callback',@btnZoomOut_clicked); %#ok, unused variable
+    btnZoomIn       = uicontrol('Style','Pushbutton','Units','normalized','position',[.950,.230,.030,.05],'String','+'                              ,'Callback',@btnZoomIn_clicked); %#ok, unused variable
     btnSave         = uicontrol('Style','Pushbutton','Units','normalized','position',[.907,.050,.088,.05],'String','Save objects','Callback',@btnSave_clicked); %#ok, unused variable    
     
     
@@ -131,7 +132,24 @@ function Dots = markVolume2D(I, Dots)
             scroll(frame, 'right');
         end
     end
-    
+
+    function btnDelete_clicked(src,event) %#ok, unused arguments
+        % Remove selected object from the list
+        if SelObjID > 0
+            Dots.Pos(SelObjID, :) = [];
+            Dots.Vox(SelObjID)    = [];
+            Dots.Filter(SelObjID) = [];
+
+            if SelObjID > numel(Dots.Filter)
+                SelObjID = numel(Dots.Filter);
+                set(lstDots, 'Value', 1);
+            end
+            PosZoom = [-1, -1];
+            lstDotsRefresh;            
+            scroll(frame, 'right');    
+        end
+    end
+
     function ID = addDot(X, Y, D)
         % Creates a new object #ID from pixels within R radius
         % X,Y: center coordinates, R: radius in zoomed region pixels 
