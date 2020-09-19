@@ -21,6 +21,12 @@
 %
 % *Change log*
 %
+% _*Version 5.2*            created on 2020-09-19 by Luca Della Santina_ 
+%
+%  + Removed Refine tool
+%  + Fixed misalignment of sensitive point on crossbar
+%  + Selecting a reference point on-screen selects corresponding on table
+%
 % _*Version 5.1*            created on 2020-09-15 by Luca Della Santina_ 
 %
 %  + Optional saving of different cut parts

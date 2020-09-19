@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="3829748756" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="1030704090" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
     <param.appname>VolumeCut</param.appname>
     <param.authnamewatermark>Luca Della Santina</param.authnamewatermark>
     <param.email />
@@ -13,8 +13,8 @@
     <param.summary>Cut image volumes along arbitrary surfaces</param.summary>
     <param.description>Copyright 2017-2020 Luca Della Santina
 Licensed under the term of GPL v3</param.description>
-    <param.screenshot>/tmp/tp0c8c39bb_7de3_4006_8bf6_fc3f84df506f.png</param.screenshot>
-    <param.version>5.1</param.version>
+    <param.screenshot>/tmp/tp489585b8_6c52_4d28_9f0f_ccadc601ae7f.png</param.screenshot>
+    <param.version>5.2</param.version>
     <param.products.name>
       <item>MATLAB</item>
       <item>Image Processing Toolbox</item>

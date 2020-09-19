@@ -47,7 +47,7 @@ function Dots = markVolume2D(I, Dots)
     pnlSettings     = uipanel(  'Title','Objects'   ,'Units','normalized','Position',[.903,.005,.095,.99]); %#ok, unused variable
     btnLoad         = uicontrol('Style','Pushbutton','Units','normalized','position',[.907,.920,.088,.05],'String','Load objects','Callback',@btnLoad_clicked); %#ok, unused variable    
     txtAction       = uicontrol('Style','text'      ,'Units','normalized','position',[.912,.875,.020,.02],'String','Tool:'); %#ok, unused handle
-    cmbAction       = uicontrol('Style','popup'     ,'Units','normalized','Position',[.935,.860,.055,.04],'String', {'Add (a)','Select (s)', 'Refine (r)'},'Callback', @cmbAction_changed);
+    cmbAction       = uicontrol('Style','popup'     ,'Units','normalized','Position',[.935,.860,.055,.04],'String', {'Add (a)','Select (s)'},'Callback', @cmbAction_changed);
     chkShowObjects  = uicontrol('Style','checkbox'  ,'Units','normalized','position',[.912,.830,.085,.02],'String','Show (spacebar)', 'Value',1,'Callback',@chkShowObjects_changed);
     chkShowAllZ     = uicontrol('Style','checkbox'  ,'Units','normalized','position',[.912,.790,.085,.02],'String','Ignore Z (Z)', 'Value',1,'Callback',@chkShowAllZ_changed);
     lstDots         = uicontrol('Style','listbox'   ,'Units','normalized','position',[.907,.530,.085,.25],'String',[],'Callback',@lstDots_valueChanged);
@@ -60,8 +60,8 @@ function Dots = markVolume2D(I, Dots)
     txtSelObjPix    = uicontrol('Style','text'      ,'Units','normalized','position',[.907,.320,.085,.02],'String','Voxels : ');
 
     txtZoom         = uicontrol('Style','text'      ,'Units','normalized','position',[.925,.290,.050,.02],'String','Zoom level:'); %#ok, unused variable
-    btnZoomOut      = uicontrol('Style','Pushbutton','Units','normalized','position',[.920,.230,.030,.05],'String','-'                              ,'Callback',@btnZoomOut_clicked); %#ok, unused variable
-    btnZoomIn       = uicontrol('Style','Pushbutton','Units','normalized','position',[.950,.230,.030,.05],'String','+'                              ,'Callback',@btnZoomIn_clicked); %#ok, unused variable
+    btnZoomOut      = uicontrol('Style','Pushbutton','Units','normalized','position',[.920,.230,.030,.05],'String','-','Callback',@btnZoomOut_clicked); %#ok, unused variable
+    btnZoomIn       = uicontrol('Style','Pushbutton','Units','normalized','position',[.950,.230,.030,.05],'String','+','Callback',@btnZoomIn_clicked); %#ok, unused variable
     btnSave         = uicontrol('Style','Pushbutton','Units','normalized','position',[.907,.050,.088,.05],'String','Save objects','Callback',@btnSave_clicked); %#ok, unused variable    
     
     
@@ -189,7 +189,6 @@ function Dots = markVolume2D(I, Dots)
         switch get(src,'Value')
             case 1, actionType = 'Add';
             case 2, actionType = 'Select';
-            case 3, actionType = 'Refine';
         end
     end
 
@@ -197,7 +196,6 @@ function Dots = markVolume2D(I, Dots)
         switch newType
             case 'Add',    set(cmbAction, 'Value', 1);
             case 'Select', set(cmbAction, 'Value', 2);
-            case 'Refine', set(cmbAction, 'Value', 3);
         end
     end
 
@@ -571,19 +569,18 @@ function Dots = markVolume2D(I, Dots)
                     if isvalid(brush), delete(brush); end
 
                 elseif PosX <= size(I,2)*2
-                    
                     % Mouse in Right Panel, act depending of the selected tool
                     switch actionType
-                        case {'Enclose', 'Select'}
+                        case 'Select'
                             oldPointer = get(fig_handle, 'Pointer');
                             if ~strcmp(oldPointer, 'watch')
                                 [PCData, PHotSpot] = getPointerCrosshair;
                                 set(fig_handle, 'Pointer', 'custom', 'PointerShapeCData', PCData, 'PointerShapeHotSpot', PHotSpot);
                             end
                             if isvalid(brush), delete(brush); end
-                        case {'Add', 'Refine', 'MagicWand'}
-                            % Display a circle if we are in the right panel
+                            return
                             
+                        case 'Add'                            
                             % Recreate the brush because frame is redrawn otherwise
                             % just redraw the brush in the new location
                             ZoomFactor = size(I,1) / CutNumVox(1);
@@ -698,37 +695,6 @@ function Dots = markVolume2D(I, Dots)
                                        max(CutNumVox(1)/2+1,Pos(2)), frame];
                                 Pos = [min(size(ImStk,2)-CutNumVox(2)/2,Pos(1)),...
                                        min(size(ImStk,1)-CutNumVox(1)/2,Pos(2)),frame];
-                                
-                            case 'Refine'
-                                PosZoom = [PosZoomX, PosZoomY frame];
-                                Pos     = [Pos(1), Pos(2) frame];
-
-                                % Absolute position on image of point clicked on right panel
-                                % position Pos. Note: Pos(2) is X, Pos(1) is Y
-                                fymin = max(ceil(Pos(2) - CutNumVox(1)/2), 1);
-                                fymax = min(ceil(Pos(2) + CutNumVox(1)/2), size(ImStk,1));
-                                fxmin = max(ceil(Pos(1) - CutNumVox(2)/2), 1);
-                                fxmax = min(ceil(Pos(1) + CutNumVox(2)/2), size(ImStk,2));
-                                fxpad = CutNumVox(1) - (fxmax - fxmin); % add padding if position of selected rectangle fall out of image
-                                fypad = CutNumVox(2) - (fymax - fymin); % add padding if position of selected rectangle fall out of image
-                                absX  = fxpad+fxmin+PosZoom(1);
-                                absY  = fypad+fymin+PosZoom(2);
-
-                                if absX>0 && absX<=size(ImStk,2) && absY>0 && absY<=size(ImStk,1)                                   
-                                    % Remove selected polygon
-                                    
-                                    [PCData, PHotSpot] = getPointerCrosshair;
-                                    set(fig_handle, 'Pointer', 'custom', 'PointerShapeCData', PCData, 'PointerShapeHotSpot', PHotSpot);
-                                    if isvalid(brush), delete(brush); end
-                                    
-                                    % Add selected pixels to Dot #ID
-                                    if ~isvalid(animatedLine)
-                                        animatedLine = animatedline('LineWidth', 1, 'Color', 'blue');
-                                    else
-                                        addpoints(animatedLine, PosX, PosY);
-                                    end
-                                    return
-                                end
                         end
                         
                         
@@ -756,19 +722,21 @@ function Dots = markVolume2D(I, Dots)
                                     ZoomFactor = size(I,1) / CutNumVox(1);
                                     brushSizeScaled = brushSize * ZoomFactor;                                
                                     addDot(absX, absY, brushSizeScaled);                                
+                                
+                                case 'Select'
+                                    % Locate position of points in respect to zoom area
+                                    PosZoomX = PosX - size(ImStk,2)-1;
+                                    PosZoomX = round(PosZoomX * CutNumVox(2)/(size(ImStk,2)-1));                
+                                    PosZoomY = size(ImStk,1) - PosY;
+                                    PosZoomY = CutNumVox(1)-round(PosZoomY*CutNumVox(1)/(size(ImStk,1)-1));
+                                    PosZoom = [PosZoomX, PosZoomY];
 
-                                case {'Select', 'Refine'}                                    
-                                    % Set mouse pointer shape to a crosshair
-                                    [PCData, PHotSpot] = getPointerCrosshair;
-                                    set(fig_handle, 'Pointer', 'custom', 'PointerShapeCData', PCData, 'PointerShapeHotSpot', PHotSpot);
-                                    if isvalid(brush), delete(brush); end
-                                    
-                                    % Add selected pixels to Dot #ID
-                                    if ~isvalid(animatedLine)
-                                        animatedLine = animatedline('LineWidth', 1, 'Color', 'blue');
-                                    else
-                                        addpoints(animatedLine, PosX, PosY);
-                                    end                                    
+                                    % Select the Dot below mouse pointer
+                                    set(fig_handle, 'CurrentAxes', axes_handle);
+                                    SelObjID = redraw(frame_handle, rect_handle, frame, chkShowObjects.Value, Pos, PosZoom, ImStk, CutNumVox, Dots, Dots.Filter, 0, 'right', chkShowAllZ.Value);
+                                    if SelObjID > 0
+                                        set(lstDots, 'Value', SelObjID);
+                                    end
                                     return
                             end
                         end
@@ -960,5 +928,5 @@ function [ShapeCData, HotSpot] = getPointerCrosshair
     ShapeCData(:, 15:17)= 1;
     ShapeCData(16,:)    = 2;
     ShapeCData(:, 16)   = 2;
-    HotSpot             = [16,16];
+    HotSpot             = [8,20];
 end
