@@ -25,6 +25,7 @@
 %
 %  + Removed Refine tool
 %  + Fixed misalignment of sensitive point on crossbar
+%  + Improved redrawing speed by passing only current frame to redraw
 %  + Selecting a reference point on-screen selects corresponding on table
 %
 % _*Version 5.1*            created on 2020-09-15 by Luca Della Santina_ 

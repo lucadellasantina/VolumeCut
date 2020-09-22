@@ -20,20 +20,22 @@ function Dots = markVolume2D(I, Dots)
 
     % Default parameter values
     CutNumVox  = ceil(size(I)); % Magnify a zoom region of this size
-    ImStk      = cat(4, I, I, I); % Create an RGB version of I
-    nFrames    = size(ImStk,3);
+    Isize      = size(I); % Store Image size since we're using it a lot 
+    nFrames    = Isize(3);
     actionType = 'Add';
 
-    Pos        = ceil([size(ImStk,2)/2, size(ImStk,1)/2, size(ImStk,3)/2]); % Initial position is middle of the stack
-    PosRect    = ceil([size(ImStk,2)/2-CutNumVox(2)/2, size(ImStk,1)/2-CutNumVox(1)/2]); % Initial position of zoomed rectangle (top-left vertex)
+    Pos        = ceil([Isize(2)/2, Isize(1)/2, Isize(3)/2]); % Initial position is middle of the stack
+    PosRect    = ceil([Isize(2)/2-CutNumVox(2)/2, Isize(1)/2-CutNumVox(1)/2]); % Initial position of zoomed rectangle (top-left vertex)
     PosZoom    = [-1, -1, -1];    % Initial position in zoomed area
     click      = 0;               % Initialize click status
     frame      = ceil(nFrames/2); % Current frame
+    Iframe     = I(:,:,frame);
+    Iframe     = cat(3,Iframe,Iframe,Iframe);
     SelObjID   = 0;               % Initialize selected object ID#
-    brushSize  = ceil(size(I,1)/50);
+    brushSize  = ceil(Isize(1)/50);
 	
 	% Initialize GUI
-	fig_handle = figure('Name','Sliced Volume inspector (green: valid object, red: rejected object, yellow: selected object)','NumberTitle','off','Color',[.3 .3 .3], 'MenuBar','none', 'Units','norm', ...
+	fig_handle = figure('Name','Sliced Volume inspector (green: valid object, red: rejected object, yellow: selected object)','NumberTitle','off','Color',[.3 .3 .3], 'MenuBar','none', 'Units','pixel', ...
 		'WindowButtonDownFcn',@button_down, 'WindowButtonUpFcn',@button_up, 'WindowButtonMotionFcn', @on_click, 'KeyPressFcn', @key_press, 'KeyReleaseFcn', @key_release,'windowscrollWheelFcn', @wheel_scroll);
 	
 	% Add custom scroll bar
@@ -76,6 +78,7 @@ function Dots = markVolume2D(I, Dots)
     cmbAction_assign(actionType);
 
     lstDotsRefresh;
+    set(fig_handle, 'Units', 'pixels');
     scroll(frame, 'both');
     uiwait;
 
@@ -122,7 +125,7 @@ function Dots = markVolume2D(I, Dots)
             Pos = [Dots.Pos(SelObjID,1), Dots.Pos(SelObjID,2), Dots.Pos(SelObjID,3)];
             % Ensure new position is within boundaries of the image
             Pos     = [max(Pos(1),CutNumVox(2)/2), max(Pos(2), CutNumVox(1)/2), Dots.Pos(SelObjID,3)];
-            Pos     = [min(Pos(1),size(I,2)-CutNumVox(2)/2), min(Pos(2), size(I,1)-CutNumVox(1)/2), Dots.Pos(SelObjID,3)];
+            Pos     = [min(Pos(1),Isize(2)-CutNumVox(2)/2), min(Pos(2), Isize(1)-CutNumVox(1)/2), Dots.Pos(SelObjID,3)];
             PosRect = [Pos(1)-CutNumVox(2)/2, Pos(2)-CutNumVox(1)/2, Dots.Pos(SelObjID,3)];
             PosZoom = [-1 -1 -1];
             frame = Dots.Pos(SelObjID,3);
@@ -155,11 +158,11 @@ function Dots = markVolume2D(I, Dots)
         % X,Y: center coordinates, R: radius in zoomed region pixels 
         
         % Convert radius from zoomed to image units region scaling factor
-        ZoomFactor = size(I,1) / CutNumVox(1);
+        ZoomFactor = Isize(1) / CutNumVox(1);
         r = D / ZoomFactor /2;
         
         % Create a circular mask around the pixel [xc,yc] of radius r
-        [x, y] = meshgrid(1:size(I,2), 1:size(I,1));
+        [x, y] = meshgrid(1:Isize(2), 1:Isize(1));
         mask = (x-X).^2 + (y-Y).^2 < r^2;
         
         % Generate statistics of the new dot and add to Dots
@@ -168,13 +171,13 @@ function Dots = markVolume2D(I, Dots)
             
             [Dots.Vox(1).Pos(:,1), Dots.Vox(1).Pos(:,2)] = ind2sub(size(mask), find(mask));            
             Dots.Vox(1).Pos(:,3) = frame;
-            Dots.Vox(1).Ind     = sub2ind(size(I),Dots.Vox(1).Pos(:,1), Dots.Vox(1).Pos(:,2), Dots.Vox(1).Pos(:,3));
+            Dots.Vox(1).Ind     = sub2ind(Isize,Dots.Vox(1).Pos(:,1), Dots.Vox(1).Pos(:,2), Dots.Vox(1).Pos(:,3));
             Dots.Filter         = 1;
         else
             Dots.Pos(end+1,:)   = [X,Y, frame];
             [Dots.Vox(end+1).Pos(:,1), Dots.Vox(end+1).Pos(:,2)] = ind2sub(size(mask), find(mask));
             Dots.Vox(end).Pos(:,3) = frame;            
-            Dots.Vox(end).Ind     = sub2ind(size(I), Dots.Vox(end).Pos(:,1), Dots.Vox(end).Pos(:,2), Dots.Vox(end).Pos(:,3));
+            Dots.Vox(end).Ind     = sub2ind(Isize, Dots.Vox(end).Pos(:,1), Dots.Vox(end).Pos(:,2), Dots.Vox(end).Pos(:,3));
             Dots.Filter(end+1)  = 1;
         end 
                 
@@ -209,8 +212,8 @@ function Dots = markVolume2D(I, Dots)
 
     function btnZoomOut_clicked(src, event) %#ok, unused arguments        
         % Ensure new zoomed region is still within image borders
-        CutNumVox = [min(CutNumVox(1)*2, size(I,1)), min(CutNumVox(2)*2, size(I, 2))];
-        Pos       = [min(Pos(1),size(ImStk,2)-CutNumVox(2)/2), min(Pos(2),size(ImStk,1)-CutNumVox(1)/2), frame];       
+        CutNumVox = [min(CutNumVox(1)*2, Isize(1)), min(CutNumVox(2)*2, Isize(2))];
+        Pos       = [min(Pos(1),Isize(2)-CutNumVox(2)/2), min(Pos(2),Isize(1)-CutNumVox(1)/2), frame];       
         PosRect   = [max(1,Pos(1)-CutNumVox(2)/2), max(1,Pos(2)-CutNumVox(1)/2)];
         PosZoom   = [-1, -1, -1];
         scroll(frame, 'both');
@@ -264,19 +267,19 @@ function Dots = markVolume2D(I, Dots)
             click_point = get(gca, 'CurrentPoint');
             
             PosX     = ceil(click_point(1,1));
-            PosZoomX = PosX - size(ImStk,2) -1;
-            PosZoomX = ceil(PosZoomX * CutNumVox(2)/(size(ImStk,2)-1));
+            PosZoomX = PosX - Isize(2) -1;
+            PosZoomX = ceil(PosZoomX * CutNumVox(2)/(Isize(2)-1));
 
             PosY     = ceil(click_point(1,2));                        
-            PosZoomY = size(ImStk,1) - PosY;
-            PosZoomY = CutNumVox(1)-ceil(PosZoomY*CutNumVox(1)/(size(ImStk,1)-1));
+            PosZoomY = Isize(1) - PosY;
+            PosZoomY = CutNumVox(1)-ceil(PosZoomY*CutNumVox(1)/(Isize(1)-1));
 
             PosZoom  = [PosZoomX, PosZoomY frame];
             Pos      = [Pos(1), Pos(2) frame];
             SelObjID = 0;
         else        
             % Create mask inside the passed polygon coordinates
-            [x, y] = meshgrid(1:size(ImStk,2), 1:size(ImStk,1));
+            [x, y] = meshgrid(1:Isize(2), 1:Isize(1));
             mask   = inpolygon_fast(x,y,xv,yv); % ~75x faster than inpolygon
             
             % Select Dot IDs id their voxels fall within the polygon arel
@@ -285,9 +288,9 @@ function Dots = markVolume2D(I, Dots)
             
             % Restrict search only to objects within the zoomed area
             fxmin = max(ceil(Pos(1) - CutNumVox(2)/2)+1, 1);
-            fxmax = min(ceil(Pos(1) + CutNumVox(2)/2), size(I,2));
+            fxmax = min(ceil(Pos(1) + CutNumVox(2)/2), Isize(2));
             fymin = max(ceil(Pos(2) - CutNumVox(1)/2)+1, 1);
-            fymax = min(ceil(Pos(2) + CutNumVox(1)/2), size(I,1));            
+            fymax = min(ceil(Pos(2) + CutNumVox(1)/2), Isize(1));            
             valIcut = Dots.Filter;
             rejIcut = ~Dots.Filter;
             for i = 1:numel(valIcut)
@@ -334,19 +337,19 @@ function Dots = markVolume2D(I, Dots)
             click_point = get(gca, 'CurrentPoint');
             
             PosX     = ceil(click_point(1,1));
-            PosZoomX = PosX - size(ImStk,2)+1;
-            PosZoomX = ceil(PosZoomX * CutNumVox(2)/size(ImStk,2));
+            PosZoomX = PosX - Isize(2)+1;
+            PosZoomX = ceil(PosZoomX * CutNumVox(2)/Isize(2));
 
             PosY     = ceil(click_point(1,2));                        
-            PosZoomY = size(ImStk,1) - PosY;
-            PosZoomY = CutNumVox(1)-ceil(PosZoomY*CutNumVox(1)/size(ImStk,1));
+            PosZoomY = Isize(1) - PosY;
+            PosZoomY = CutNumVox(1)-ceil(PosZoomY*CutNumVox(1)/Isize(1));
 
             PosZoom  = [PosZoomX, PosZoomY frame];
             Pos      = [Pos(1), Pos(2) frame];
             SelObjID = 0;
         else        
             % Create mask of pixels inside the passed polygon coordinates
-            [x, y] = meshgrid(1:size(ImStk,2), 1:size(ImStk,1));
+            [x, y] = meshgrid(1:Isize(2), 1:Isize(1));
             mask   = inpolygon_fast(x,y,xv,yv); % ~75x faster than inpolygon
             
             if numel(SelObjID)>1
@@ -359,11 +362,11 @@ function Dots = markVolume2D(I, Dots)
                 % Create a new object to append to the list of objects
                 
                 [MaskSub2Dx, MaskSub2Dy] = ind2sub(size(mask), find(mask)); % 2D coordinates (x,y) of pixels within polygon
-                MaskInd3D = sub2ind(size(I), MaskSub2Dx, MaskSub2Dy, ones(size(MaskSub2Dx))*frame); % Index of those pixels within the 3D image stack
+                MaskInd3D = sub2ind(Isize, MaskSub2Dx, MaskSub2Dy, ones(size(MaskSub2Dx))*frame); % Index of those pixels within the 3D image stack
                 SelObjID = numel(Dots.Vox)+1;
                 Dots.Vox(SelObjID).Ind = MaskInd3D;
                 Dots.Vox(SelObjID).Pos = zeros(numel(Dots.Vox(SelObjID).Ind), 2);
-                [Dots.Vox(SelObjID).Pos(:,1), Dots.Vox(SelObjID).Pos(:,2), Dots.Vox(SelObjID).Pos(:,3)] = ind2sub(size(I), Dots.Vox(SelObjID).Ind);            
+                [Dots.Vox(SelObjID).Pos(:,1), Dots.Vox(SelObjID).Pos(:,2), Dots.Vox(SelObjID).Pos(:,3)] = ind2sub(Isize, Dots.Vox(SelObjID).Ind);            
                 Dots.Vox(SelObjID).RawBright = I(Dots.Vox(SelObjID).Ind);
                 Dots.Pos(SelObjID, :) = median(Dots.Vox(SelObjID).Pos);
                 Dots.Vol(SelObjID) = numel(Dots.Vox(SelObjID).Ind);
@@ -380,10 +383,10 @@ function Dots = markVolume2D(I, Dots)
                 % User left-clicked Add pixels to current object (SelObjID)
                 
                 [MaskSub2Dx, MaskSub2Dy] = ind2sub(size(mask), find(mask)); % 2D coordinates (x,y) of pixels within polygon
-                MaskInd3D = sub2ind(size(I), MaskSub2Dx, MaskSub2Dy, ones(size(MaskSub2Dx))*frame); % Index of those pixels within the 3D image stack
+                MaskInd3D = sub2ind(Isize, MaskSub2Dx, MaskSub2Dy, ones(size(MaskSub2Dx))*frame); % Index of those pixels within the 3D image stack
                 Dots.Vox(SelObjID).Ind = union(Dots.Vox(SelObjID).Ind, MaskInd3D, 'sorted');
                 Dots.Vox(SelObjID).Pos = zeros(numel(Dots.Vox(SelObjID).Ind), 2);
-                [Dots.Vox(SelObjID).Pos(:,1), Dots.Vox(SelObjID).Pos(:,2), Dots.Vox(SelObjID).Pos(:,3)] = ind2sub(size(I), Dots.Vox(SelObjID).Ind);            
+                [Dots.Vox(SelObjID).Pos(:,1), Dots.Vox(SelObjID).Pos(:,2), Dots.Vox(SelObjID).Pos(:,3)] = ind2sub(Isize, Dots.Vox(SelObjID).Ind);            
                 Dots.Vox(SelObjID).RawBright = I(Dots.Vox(SelObjID).Ind);
                 Dots.Vol(SelObjID) = numel(Dots.Vox(SelObjID).Ind);
                 % Recalculate ITMax and ITSum and Pos
@@ -393,10 +396,10 @@ function Dots = markVolume2D(I, Dots)
                 % User right-clicked Add pixels to current object (SelObjID)
 
                 [MaskSub2Dx, MaskSub2Dy] = ind2sub(size(mask), find(mask)); % 2D coordinates (x,y) of pixels within polygon
-                MaskInd3D = sub2ind(size(I), MaskSub2Dx, MaskSub2Dy, ones(size(MaskSub2Dx))*frame); % Index of those pixels within the 3D image stack
+                MaskInd3D = sub2ind(Isize, MaskSub2Dx, MaskSub2Dy, ones(size(MaskSub2Dx))*frame); % Index of those pixels within the 3D image stack
                 Dots.Vox(SelObjID).Ind = setdiff(Dots.Vox(SelObjID).Ind, MaskInd3D, 'sorted');
                 Dots.Vox(SelObjID).Pos = zeros(numel(Dots.Vox(SelObjID).Ind), 2);
-                [Dots.Vox(SelObjID).Pos(:,1), Dots.Vox(SelObjID).Pos(:,2), Dots.Vox(SelObjID).Pos(:,3)] = ind2sub(size(I), Dots.Vox(SelObjID).Ind);            
+                [Dots.Vox(SelObjID).Pos(:,1), Dots.Vox(SelObjID).Pos(:,2), Dots.Vox(SelObjID).Pos(:,3)] = ind2sub(Isize, Dots.Vox(SelObjID).Ind);            
                 Dots.Vox(SelObjID).RawBright = I(Dots.Vox(SelObjID).Ind);
                 Dots.Vol(SelObjID) = numel(Dots.Vox(SelObjID).Ind);
                 % Recalculate ITMax and ITSum and Pos
@@ -423,10 +426,10 @@ function Dots = markVolume2D(I, Dots)
             end
             
             % Adjust brush to the new size and redraw it onscreen
-            ZoomFactor = size(I,1) / CutNumVox(1);
+            ZoomFactor = Isize(1) / CutNumVox(1);
             brushSizeScaled = brushSize * ZoomFactor;
-            PosXfenced = max(brushSizeScaled/2, min(PosMouse(1)-brushSizeScaled/2, size(I,2)*2-brushSizeScaled-2));
-            PosYfenced = max(brushSizeScaled/2, min(PosMouse(2)-brushSizeScaled/2, size(I,1)*2-brushSizeScaled-2));
+            PosXfenced = max(brushSizeScaled/2, min(PosMouse(1)-brushSizeScaled/2, Isize(2)*2-brushSizeScaled-2));
+            PosYfenced = max(brushSizeScaled/2, min(PosMouse(2)-brushSizeScaled/2, Isize(1)*2-brushSizeScaled-2));
             brushPos = [PosXfenced, PosYfenced, brushSizeScaled, brushSizeScaled];
             
             if ~isvalid(brush)
@@ -463,7 +466,7 @@ function Dots = markVolume2D(I, Dots)
                 PosZoom = [-1, -1, -1];
                 scroll(frame, 'both');
             case {'rightarrow','d'}
-                Pos = [min(size(ImStk,2)-1-CutNumVox(2)/2, Pos(1)+CutNumVox(2)-ceil(CutNumVox(2)/5)), Pos(2),frame];
+                Pos = [min(Isize(2)-1-CutNumVox(2)/2, Pos(1)+CutNumVox(2)-ceil(CutNumVox(2)/5)), Pos(2),frame];
                 PosZoom = [-1, -1, -1];
                 scroll(frame, 'both');
             case {'uparrow','w'}
@@ -471,7 +474,7 @@ function Dots = markVolume2D(I, Dots)
                 PosZoom = [-1, -1, -1];
                 scroll(frame,'both');
             case {'downarrow','s'}
-                Pos = [Pos(1), min(size(ImStk,1)-1-CutNumVox(1)/2, Pos(2)+CutNumVox(1)-ceil(CutNumVox(1)/5)),frame];
+                Pos = [Pos(1), min(Isize(1)-1-CutNumVox(1)/2, Pos(2)+CutNumVox(1)-ceil(CutNumVox(1)/5)),frame];
                 PosZoom = [-1, -1, -1];
                 scroll(frame, 'both');
             case 'equal' , btnZoomIn_clicked;
@@ -501,14 +504,14 @@ function Dots = markVolume2D(I, Dots)
         MousePosX   = ceil(click_point(1,1));
         switch actionType
             case {'Select'}                
-                if MousePosX > size(ImStk,2) && isvalid(animatedLine)
+                if MousePosX > Isize(2) && isvalid(animatedLine)
                     [x,y] = getpoints(animatedLine);
 
                     % Locate position of points in respect to zoom area
-                    PosZoomX = x - size(ImStk,2)-1;
-                    PosZoomX = ceil(PosZoomX * CutNumVox(2)/(size(ImStk,2)-1));                
-                    PosZoomY = size(ImStk,1) - y;
-                    PosZoomY = CutNumVox(1)-ceil(PosZoomY*CutNumVox(1)/(size(ImStk,1)-1));
+                    PosZoomX = x - Isize(2)-1;
+                    PosZoomX = ceil(PosZoomX * CutNumVox(2)/(Isize(2)-1));                
+                    PosZoomY = Isize(1) - y;
+                    PosZoomY = CutNumVox(1)-ceil(PosZoomY*CutNumVox(1)/(Isize(1)-1));
 
                     % Locate position of points in respect to original img
                     absX = PosZoomX + PosRect(1);
@@ -519,14 +522,14 @@ function Dots = markVolume2D(I, Dots)
                     delete(animatedLine);
                 end
             case {'Add', 'Refine'}
-                if MousePosX > size(ImStk,2) && isvalid(animatedLine)
+                if MousePosX > Isize(2) && isvalid(animatedLine)
                     [x,y] = getpoints(animatedLine);
 
                     % Locate position of points in respect to zoom area
-                    PosZoomX = x - size(ImStk,2)-1;
-                    PosZoomX = ceil(PosZoomX * CutNumVox(2)/(size(ImStk,2)-1));                
-                    PosZoomY = size(ImStk,1) - y;
-                    PosZoomY = CutNumVox(1)-ceil(PosZoomY*CutNumVox(1)/(size(ImStk,1)-1));
+                    PosZoomX = x - Isize(2)-1;
+                    PosZoomX = ceil(PosZoomX * CutNumVox(2)/(Isize(2)-1));                
+                    PosZoomY = Isize(1) - y;
+                    PosZoomY = CutNumVox(1)-ceil(PosZoomY*CutNumVox(1)/(Isize(1)-1));
 
                     % Locate position of points in respect to original img
                     absX = PosZoomX + PosRect(1);
@@ -552,14 +555,14 @@ function Dots = markVolume2D(I, Dots)
                 PosX = ceil(click_point(1,1));
                 PosY = ceil(click_point(1,2));
 
-                if PosY <= 0 || PosY >= size(I,1)
+                if PosY <= 0 || PosY >= Isize(1)
                     % Display the default arrow everywhere else
                     set(fig_handle, 'Pointer', 'arrow');
                     if isvalid(brush), delete(brush); end 
                     return;
                 end
                 
-                if PosX <= size(I,2)
+                if PosX <= Isize(2)
                     % Mouse in Left Panel, display a hand
                     
                     oldPointer = get(fig_handle, 'Pointer');
@@ -568,14 +571,14 @@ function Dots = markVolume2D(I, Dots)
                     end
                     if isvalid(brush), delete(brush); end
 
-                elseif PosX <= size(I,2)*2
+                elseif PosX <= Isize(2)*2
                     % Mouse in Right Panel, act depending of the selected tool
                     switch actionType
                         case 'Select'
                             oldPointer = get(fig_handle, 'Pointer');
                             if ~strcmp(oldPointer, 'watch')
                                 [PCData, PHotSpot] = getPointerCrosshair;
-                                set(fig_handle, 'Pointer', 'custom', 'PointerShapeCData', PCData, 'PointerShapeHotSpot', PHotSpot);
+                                set(fig_handle, 'Pointer', 'custom', 'PointerShapeCData', PCData, 'PointerShapeHotSpot', PHotSpot, 'Units', 'pixel');
                             end
                             if isvalid(brush), delete(brush); end
                             return
@@ -583,11 +586,11 @@ function Dots = markVolume2D(I, Dots)
                         case 'Add'                            
                             % Recreate the brush because frame is redrawn otherwise
                             % just redraw the brush in the new location
-                            ZoomFactor = size(I,1) / CutNumVox(1);
+                            ZoomFactor = Isize(1) / CutNumVox(1);
                             
                             brushSizeScaled = brushSize * ZoomFactor;                                                        
-                            PosXfenced = max(brushSizeScaled/2, min(PosX-brushSizeScaled/2, size(I,2)*2-brushSizeScaled-2));
-                            PosYfenced = max(brushSizeScaled/8, min(PosY-brushSizeScaled/2, size(I,1)*2-brushSizeScaled-2));
+                            PosXfenced = max(brushSizeScaled/2, min(PosX-brushSizeScaled/2, Isize(2)*2-brushSizeScaled-2));
+                            PosYfenced = max(brushSizeScaled/8, min(PosY-brushSizeScaled/2, Isize(1)*2-brushSizeScaled-2));
                             brushPos = [PosXfenced, PosYfenced, brushSizeScaled, brushSizeScaled];
                             
                             PosMouse = [PosX, PosY];
@@ -599,7 +602,7 @@ function Dots = markVolume2D(I, Dots)
                                 set(brush, 'Position',  brushPos);
                             end
                             
-                            if PosY <= 0 || PosY > size(I,1)-brushSizeScaled/2
+                            if PosY <= 0 || PosY > Isize(1)-brushSizeScaled/2
                                 % Display the default arrow everywhere else
                                 set(fig_handle, 'Pointer', 'arrow');
                                 if isvalid(brush), delete(brush); end 
@@ -615,7 +618,7 @@ function Dots = markVolume2D(I, Dots)
                     if isvalid(brush), delete(brush); end
                 end
                 
-                if PosY < 0 || PosY > size(ImStk,1)
+                if PosY < 0 || PosY > Isize(1)
                     % Display the default arrow everywhere else
                     set(fig_handle, 'Pointer', 'arrow');
                     return;
@@ -623,13 +626,13 @@ function Dots = markVolume2D(I, Dots)
 
                 if exist('oldPointer', 'var') && strcmp(oldPointer, 'watch')
                     return;
-                elseif PosX <= size(ImStk,2)
+                elseif PosX <= Isize(2)
                     % Mouse in Left Panel, display a hand
                     set(fig_handle, 'Pointer', 'fleur');
-                elseif PosX <= size(ImStk,2)*2
+                elseif PosX <= Isize(2)*2
                     % Mouse in Right Panel, act depending of the selected tool
                     [PCData, PHotSpot] = getPointerCrosshair;
-                    set(fig_handle, 'Pointer', 'custom', 'PointerShapeCData', PCData, 'PointerShapeHotSpot', PHotSpot);
+                    set(fig_handle, 'Pointer', 'custom', 'PointerShapeCData', PCData, 'PointerShapeHotSpot', PHotSpot, 'Units', 'pixel');
                 else
                     % Display the default arrow everywhere else
                     set(fig_handle, 'Pointer', 'arrow');
@@ -646,6 +649,7 @@ function Dots = markVolume2D(I, Dots)
                 if new_f < 1 || new_f > nFrames || new_f == frame
                     return
                 end
+                set(fig_handle, 'Units', 'pixels');
                 scroll(new_f, 'both');
                 
             case 2  % User clicked on image
@@ -654,7 +658,7 @@ function Dots = markVolume2D(I, Dots)
                 PosX = ceil(click_point(1,1));
                 PosY = ceil(click_point(1,2));
                 
-                if PosX <= size(ImStk,2) % User clicked on LEFT-panel
+                if PosX <= Isize(2) % User clicked on LEFT-panel
                     ClickPos = [max(CutNumVox(2)/2+1, PosX),...
                                 max(CutNumVox(1)/2+1, PosY)];
                     
@@ -662,8 +666,8 @@ function Dots = markVolume2D(I, Dots)
                     Pos = [max(CutNumVox(2)/2, PosX),...
                            max(CutNumVox(1)/2, PosY), frame];
                     
-                    Pos = [min(size(ImStk,2)-CutNumVox(2)/2,ClickPos(1)),...
-                           min(size(ImStk,1)-CutNumVox(1)/2,ClickPos(2)), frame];
+                    Pos = [min(Isize(2)-CutNumVox(2)/2,ClickPos(1)),...
+                           min(Isize(1)-CutNumVox(1)/2,ClickPos(2)), frame];
                     PosZoom  = [-1, -1, -1];
                     PosRect  = [ClickPos(1)-CutNumVox(2)/2, ClickPos(2)-CutNumVox(1)/2];
                     scroll(frame, 'left');
@@ -672,11 +676,11 @@ function Dots = markVolume2D(I, Dots)
                     % Detect coordinates of the point clicked in PosZoom
                     % Note: x,y coordinates are inverted in ImStk
                     % Note: x,y coordinates are inverted in CutNumVox
-                    PosZoomX = PosX - size(ImStk,2)-1;
-                    PosZoomX = ceil(PosZoomX * CutNumVox(2)/(size(ImStk,2)-1));
+                    PosZoomX = PosX - Isize(2)-1;
+                    PosZoomX = ceil(PosZoomX * CutNumVox(2)/(Isize(2)-1));
                     
-                    PosZoomY = size(ImStk,1) - PosY;
-                    PosZoomY = CutNumVox(1)-ceil(PosZoomY*CutNumVox(1)/(size(ImStk,1)-1));
+                    PosZoomY = Isize(1) - PosY;
+                    PosZoomY = CutNumVox(1)-ceil(PosZoomY*CutNumVox(1)/(Isize(1)-1));
 
                     % Do different things depending whether left/right-clicked
                     clickType = get(fig_handle, 'SelectionType');
@@ -693,8 +697,8 @@ function Dots = markVolume2D(I, Dots)
                                 % Make sure zoom rectangle is within image area
                                 Pos = [max(CutNumVox(2)/2+1,Pos(1)),...
                                        max(CutNumVox(1)/2+1,Pos(2)), frame];
-                                Pos = [min(size(ImStk,2)-CutNumVox(2)/2,Pos(1)),...
-                                       min(size(ImStk,1)-CutNumVox(1)/2,Pos(2)),frame];
+                                Pos = [min(Isize(2)-CutNumVox(2)/2,Pos(1)),...
+                                       min(Isize(1)-CutNumVox(1)/2,Pos(2)),frame];
                         end
                         
                         
@@ -707,33 +711,36 @@ function Dots = markVolume2D(I, Dots)
                         % Absolute position on image of point clicked on right panel
                         % position Pos. Note: Pos(2) is X, Pos(1) is Y
                         fymin = max(ceil(Pos(2) - CutNumVox(1)/2), 1);
-                        fymax = min(ceil(Pos(2) + CutNumVox(1)/2), size(ImStk,1));
+                        fymax = min(ceil(Pos(2) + CutNumVox(1)/2), Isize(1));
                         fxmin = max(ceil(Pos(1) - CutNumVox(2)/2), 1);
-                        fxmax = min(ceil(Pos(1) + CutNumVox(2)/2), size(ImStk,2));
+                        fxmax = min(ceil(Pos(1) + CutNumVox(2)/2), Isize(2));
                         fxpad = CutNumVox(1) - (fxmax - fxmin); % add padding if position of selected rectangle fall out of image
                         fypad = CutNumVox(2) - (fymax - fymin); % add padding if position of selected rectangle fall out of image
                         absX  = fxpad+fxmin+PosZoom(1);
                         absY  = fypad+fymin+PosZoom(2);
                         
-                        if absX>0 && absX<=size(ImStk,2) && absY>0 && absY<=size(ImStk,1)
+                        if absX>0 && absX<=Isize(2) && absY>0 && absY<=Isize(1)
                             switch actionType         
                                 case 'Add'
                                     % Create a new Dot in this location
-                                    ZoomFactor = size(I,1) / CutNumVox(1);
+                                    ZoomFactor = Isize(1) / CutNumVox(1);
                                     brushSizeScaled = brushSize * ZoomFactor;                                
                                     addDot(absX, absY, brushSizeScaled);                                
                                 
                                 case 'Select'
                                     % Locate position of points in respect to zoom area
-                                    PosZoomX = PosX - size(ImStk,2)-1;
-                                    PosZoomX = round(PosZoomX * CutNumVox(2)/(size(ImStk,2)-1));                
-                                    PosZoomY = size(ImStk,1) - PosY;
-                                    PosZoomY = CutNumVox(1)-round(PosZoomY*CutNumVox(1)/(size(ImStk,1)-1));
+                                    PosZoomX = PosX - Isize(2)-1;
+                                    PosZoomX = round(PosZoomX * CutNumVox(2)/(Isize(2)-1));                
+                                    PosZoomY = Isize(1) - PosY;
+                                    PosZoomY = CutNumVox(1)-round(PosZoomY*CutNumVox(1)/(Isize(1)-1));
                                     PosZoom = [PosZoomX, PosZoomY];
 
                                     % Select the Dot below mouse pointer
                                     set(fig_handle, 'CurrentAxes', axes_handle);
-                                    SelObjID = redraw(frame_handle, rect_handle, frame, chkShowObjects.Value, Pos, PosZoom, ImStk, CutNumVox, Dots, Dots.Filter, 0, 'right', chkShowAllZ.Value);
+                                    Iframe = I(:,:,frame);
+                                    Iframe = cat(3, Iframe, Iframe, Iframe); % Create an RGB version of I
+
+                                    SelObjID = redraw(frame_handle, rect_handle, frame, chkShowObjects.Value, Pos, PosZoom, Iframe, CutNumVox, Dots, Dots.Filter, 0, 'right', chkShowAllZ.Value);
                                     if SelObjID > 0
                                         set(lstDots, 'Value', SelObjID);
                                     end
@@ -753,7 +760,14 @@ function Dots = markVolume2D(I, Dots)
         end
         
     	% Move scroll bar to new position
-        frame = new_f;
+        if new_f ~= frame
+            % Update current frame
+            frame = new_f;
+            Iframe = I(:,:,frame);
+            Iframe = cat(3, Iframe, Iframe, Iframe); % Create an RGB version of I
+            
+        end
+
         scroll_x = (frame - 1) / nFrames;
         set(scroll_handle, 'XData', scroll_x + [0 1 1 0] * scroll_bar_width);
         
@@ -761,10 +775,11 @@ function Dots = markVolume2D(I, Dots)
         set(fig_handle, 'CurrentAxes', axes_handle);
         set(fig_handle,'DoubleBuffer','off');
 
+
         switch WhichPanel
-            case 'both',  [SelObjID, frame_handle, rect_handle] = redraw(frame_handle, rect_handle, frame, chkShowObjects.Value, Pos, PosZoom, ImStk, CutNumVox, Dots, Dots.Filter, SelObjID, 'both', chkShowAllZ.Value);
-            case 'left',  [SelObjID, frame_handle, rect_handle] = redraw(frame_handle, rect_handle, frame, chkShowObjects.Value, Pos, PosZoom, ImStk, CutNumVox, Dots, Dots.Filter, SelObjID, 'left', chkShowAllZ.Value);                
-            case 'right', [SelObjID, frame_handle, rect_handle] = redraw(frame_handle, rect_handle, frame, chkShowObjects.Value, Pos, PosZoom, ImStk, CutNumVox, Dots, Dots.Filter, SelObjID, 'right', chkShowAllZ.Value);                
+            case 'both',  [SelObjID, frame_handle, rect_handle] = redraw(frame_handle, rect_handle, frame, chkShowObjects.Value, Pos, PosZoom, Iframe, CutNumVox, Dots, Dots.Filter, SelObjID, 'both', chkShowAllZ.Value);
+            case 'left',  [SelObjID, frame_handle, rect_handle] = redraw(frame_handle, rect_handle, frame, chkShowObjects.Value, Pos, PosZoom, Iframe, CutNumVox, Dots, Dots.Filter, SelObjID, 'left', chkShowAllZ.Value);                
+            case 'right', [SelObjID, frame_handle, rect_handle] = redraw(frame_handle, rect_handle, frame, chkShowObjects.Value, Pos, PosZoom, Iframe, CutNumVox, Dots, Dots.Filter, SelObjID, 'right', chkShowAllZ.Value);                
         end        
         
         if numel(SelObjID) == 1 && SelObjID > 0
@@ -779,26 +794,27 @@ function Dots = markVolume2D(I, Dots)
     end
 end
 
-function [SelObjID, image_handle, navi_handle] = redraw(image_handle, navi_handle, frameNum, ShowObjects, Pos, PosZoom, I, NaviRectSize, Dots, passF, SelectedObjIDs, WhichPanel, ShowAllZ)
+function [SelObjID, image_handle, navi_handle] = redraw(image_handle, navi_handle, frameNum, ShowObjects, Pos, PosZoom, F, NaviRectSize, Dots, passF, SelectedObjIDs, WhichPanel, ShowAllZ)
 %% Redraw function, full image on left panel, zoomed area on right panel
 % Note: Pos(1), PosZoom(1) is X
 % Dots.Pos(:,1), I(1), PostCut(1), NaviRectSize(1) = Y
+%tic;
 
 SelObjID        = 0;
 SelObjColor     = uint8([255 255 0])'; % Yellow
 ValObjColor     = uint8([0 255 0])'; % Green
 RejObjColor     = uint8([255 0 0])'; % Red
-PostCut         = ones(NaviRectSize(1), NaviRectSize(2), 3, 'uint8');
-PostCutResized  = zeros(size(I,1), size(I,2), 3, 'uint8');
-PostVoxMapCut   = PostCut;
-F = squeeze(I(:,:,frameNum,:)); % Image of current frame
 
-if (Pos(1) > 0) && (Pos(2) > 0) && (Pos(1) < size(I,2)) && (Pos(2) < size(I,1))
+PostCut         = ones(NaviRectSize(1), NaviRectSize(2), 3, 'uint8');
+PostCutResized  = zeros(size(F,1), size(F,2), 3, 'uint8');
+PostVoxMapCut   = PostCut;
+
+if (Pos(1) > 0) && (Pos(2) > 0) && (Pos(1) < size(F,2)) && (Pos(2) < size(F,1))
     % Find borders of the area to zoom according to passed mouse position
     fxmin = max(ceil(Pos(1) - NaviRectSize(2)/2)+1, 1);
-    fxmax = min(ceil(Pos(1) + NaviRectSize(2)/2), size(I,2));
+    fxmax = min(ceil(Pos(1) + NaviRectSize(2)/2), size(F,2));
     fymin = max(ceil(Pos(2) - NaviRectSize(1)/2)+1, 1);
-    fymax = min(ceil(Pos(2) + NaviRectSize(1)/2), size(I,1));
+    fymax = min(ceil(Pos(2) + NaviRectSize(1)/2), size(F,1));
     fxpad = NaviRectSize(2) - (fxmax - fxmin); % padding if out of image
     fypad = NaviRectSize(1) - (fymax - fymin); % padding if out of image
     
@@ -885,10 +901,9 @@ if (Pos(1) > 0) && (Pos(2) > 0) && (Pos(1) < size(I,2)) && (Pos(2) < size(I,1))
     % Draw the right panel containing a zoomed version of selected area
     PostCut(fypad : fypad+fymax-fymin, fxpad : fxpad+fxmax-fxmin,:) = F(fymin:fymax, fxmin:fxmax, :);
     if ShowObjects
-        %PostCutResized = imresize(PostCut.*PostVoxMapCut,[size(I,1), size(I,2)], 'nearest');
-        PostCutResized = imresize(PostCut.*PostVoxMapCut,[size(I,1), size(I,2)], 'nearest');
+        PostCutResized = imresize(PostCut.*PostVoxMapCut,[size(F,1), size(F,2)], 'nearest');
     else
-        PostCutResized = imresize(PostCut,[size(I,1), size(I,2)], 'nearest');        
+        PostCutResized = imresize(PostCut,[size(F,1), size(F,2)], 'nearest');        
     end
     
     % Separate left and right panel visually with a vertical line
@@ -918,6 +933,7 @@ else
             set(image_handle, 'CData', CData);   
     end
 end
+%disp(num2str(toc));
 end
 
 function [ShapeCData, HotSpot] = getPointerCrosshair
@@ -928,5 +944,5 @@ function [ShapeCData, HotSpot] = getPointerCrosshair
     ShapeCData(:, 15:17)= 1;
     ShapeCData(16,:)    = 2;
     ShapeCData(:, 16)   = 2;
-    HotSpot             = [8,20];
+    HotSpot             = [16,16];
 end
