@@ -43,9 +43,7 @@ function [I, Isize, Ires] = loadImageStack(PathName, FileName)
     
     % Load the image data into matlab
     fprintf('Loading image stack... ');
-    I = uint8(ones(tmpImSizeX, tmpImSizeY, tmpImSizeZ));
-    for j = 1:tmpImSizeZ
-       I(:,:,j)=imread([PathName FileName], j);
-    end
+    I = tiffreadVolume([PathName FileName]);
+    I = uint8(I);
     fprintf('DONE\n');
 end

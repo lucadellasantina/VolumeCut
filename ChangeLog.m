@@ -21,6 +21,12 @@
 %
 % *Change log*
 %
+% _*Version 6.0*            created on 2020-09-19 by Luca Della Santina_ 
+%
+%  + New fitting algorithm near 15X faster
+%  + New reference point drawing near 2X faster
+%  + loadImageStack uses memory-efficient tiffreadVolume()
+%
 % _*Version 5.2*            created on 2020-09-19 by Luca Della Santina_ 
 %
 %  + Removed Refine tool

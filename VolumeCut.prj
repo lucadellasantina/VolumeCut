@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="2624370197" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="3435741843" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
     <param.appname>VolumeCut</param.appname>
     <param.authnamewatermark>Luca Della Santina</param.authnamewatermark>
     <param.email />
@@ -13,8 +13,8 @@
     <param.summary>Cut image volumes along arbitrary surfaces</param.summary>
     <param.description>Copyright 2017-2020 Luca Della Santina
 Licensed under the term of GPL v3</param.description>
-    <param.screenshot>/tmp/tp2e303e3d_3d0b_447b_a082_cd33ab40821c.png</param.screenshot>
-    <param.version>5.2</param.version>
+    <param.screenshot>/tmp/tpd8f9e13a_4f67_4ba6_8938_bbace81961d4.png</param.screenshot>
+    <param.version>6.0</param.version>
     <param.products.name>
       <item>MATLAB</item>
       <item>Image Processing Toolbox</item>
@@ -24,8 +24,8 @@ Licensed under the term of GPL v3</param.description>
       <item>17</item>
     </param.products.id>
     <param.products.version>
-      <item>9.8</item>
-      <item>11.1</item>
+      <item>9.9</item>
+      <item>11.2</item>
     </param.products.version>
     <param.platforms />
     <param.output>${PROJECT_ROOT}</param.output>
@@ -40,17 +40,17 @@ Licensed under the term of GPL v3</param.description>
       <file>${PROJECT_ROOT}/VolumeCut.mlapp</file>
     </fileset.main>
     <fileset.depfun>
-      <file>/home/luca/Dropbox/MATLAB scripts/Eyemeter/inpoly2.m</file>
-      <file>/home/luca/Dropbox/MATLAB scripts/Eyemeter/inpolygon_fast.m</file>
+      <file>/home/luca/Dropbox/MATLAB scripts/ObjectFinder/inpoly2.m</file>
+      <file>/home/luca/Dropbox/MATLAB scripts/ObjectFinder/inpolygon_fast.m</file>
       <file>${PROJECT_ROOT}/Skel2Graph3D.m</file>
       <file>${PROJECT_ROOT}/cutVolume.m</file>
       <file>${PROJECT_ROOT}/editStruct.m</file>
-      <file>${PROJECT_ROOT}/gridfit.m</file>
       <file>${PROJECT_ROOT}/loadImageStack.m</file>
       <file>${PROJECT_ROOT}/markVolume2D.m</file>
       <file>${PROJECT_ROOT}/saveastiff.m</file>
       <file>${PROJECT_ROOT}/skel2mask.m</file>
       <file>${PROJECT_ROOT}/snt2ml.m</file>
+      <file>${PROJECT_ROOT}/surfacefit.m</file>
     </fileset.depfun>
     <fileset.resources>
       <file>${PROJECT_ROOT}/ImarisXTensions</file>
@@ -62,15 +62,21 @@ Licensed under the term of GPL v3</param.description>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/home/luca/MATLAB/R2020a</root>
+      <root>/home/luca/MATLAB/R2020b</root>
       <toolboxes>
         <toolbox name="matlabcoder" />
+        <toolbox name="gpucoder" />
         <toolbox name="neuralnetwork" />
       </toolboxes>
       <toolbox>
         <matlabcoder>
           <enabled>true</enabled>
         </matlabcoder>
+      </toolbox>
+      <toolbox>
+        <gpucoder>
+          <enabled>true</enabled>
+        </gpucoder>
       </toolbox>
       <toolbox>
         <neuralnetwork>
@@ -87,7 +93,7 @@ Licensed under the term of GPL v3</param.description>
       <vista>false</vista>
       <linux>true</linux>
       <solaris>false</solaris>
-      <osver>5.4.0-47-generic</osver>
+      <osver>5.4.0-48-generic</osver>
       <os32>false</os32>
       <os64>true</os64>
       <arch>glnxa64</arch>
