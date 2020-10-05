@@ -23,9 +23,11 @@
 %
 % _*Version 6.0*            created on 2020-09-19 by Luca Della Santina_ 
 %
-%  + New fitting algorithm near 15X faster
+%  + MATLAB R2020b required
+%  + New fitting algorithm near 15X faster, requires curve fitting toolbox
 %  + New reference point drawing near 2X faster
 %  + loadImageStack uses memory-efficient tiffreadVolume()
+%  + New slicing algorithm, near 4X faster
 %
 % _*Version 5.2*            created on 2020-09-19 by Luca Della Santina_ 
 %

@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="3435741843" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="2500039387" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
     <param.appname>VolumeCut</param.appname>
     <param.authnamewatermark>Luca Della Santina</param.authnamewatermark>
     <param.email />
@@ -13,18 +13,21 @@
     <param.summary>Cut image volumes along arbitrary surfaces</param.summary>
     <param.description>Copyright 2017-2020 Luca Della Santina
 Licensed under the term of GPL v3</param.description>
-    <param.screenshot>/tmp/tpd8f9e13a_4f67_4ba6_8938_bbace81961d4.png</param.screenshot>
+    <param.screenshot>/tmp/tp84fbadc8_cbcd_4e1e_be3e_04a98b89ef59.png</param.screenshot>
     <param.version>6.0</param.version>
     <param.products.name>
       <item>MATLAB</item>
+      <item>Curve Fitting Toolbox</item>
       <item>Image Processing Toolbox</item>
     </param.products.name>
     <param.products.id>
       <item>1</item>
+      <item>60</item>
       <item>17</item>
     </param.products.id>
     <param.products.version>
       <item>9.9</item>
+      <item>3.5.12</item>
       <item>11.2</item>
     </param.products.version>
     <param.platforms />

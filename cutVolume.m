@@ -23,28 +23,25 @@ I1 = I;
 I2 = I;
 I3 = I;
 I4 = I;
-Mask1 = false(size(I));
-Mask2 = false(size(I));
-Mask3 = false(size(I));
-Mask4 = false(size(I));
+Mask1 = zeros(size(I),'uint8');
+Mask2 = Mask1;
+Mask3 = Mask1;
+Mask4 = Mask1;
 
 fprintf('Slicing the volume... ');
+tic;
+
 switch mode
     case 0 % Slice image in two parts: Start-g1 and g1-End
-        for x=1:size(I,1)
-            for y=1:size(I,2)
-                for z=1:size(I,3)
-                    if z < g1(ceil(x/2),ceil(y/2))
-                        Mask1(x,y,z) = true;
-                        I2(x,y,z)    = 0;
-                    elseif z >= g1(ceil(x/2),ceil(y/2))
-                        I1(x,y,z)    = 0;
-                        Mask2(x,y,z) = true;
-                    end
-                end
-            end
+
+        Surf = uint8(imresize(g1, [size(I,1) size(I,2)]));
+        for z = 1:size(I,3) 
+            Mask1(:,:,z) = Surf >= z;
+            Mask2(:,:,z) = Surf <  z;
         end
-        
+        I1 = I.*Mask1;
+        I2 = I.*Mask2;
+
     case 1 % Slice the image in three parts: Start-g1, g1-g2 and g2-End
         
         % Ensure g1 is first surface along Z, otherwise invert g1 and g2
@@ -53,43 +50,28 @@ switch mode
             g1 = g2;
             g2 = gx;
         end
-                    
-        for x=1:size(I,1)
-            for y=1:size(I,2)
-                for z=1:size(I,3)
-                    if z < g1(ceil(x/2),ceil(y/2))
-                        Mask1(x,y,z) = true;
-                        I2(x,y,z)    = 0;
-                        I3(x,y,z)    = 0;
-                    elseif (z >= g1(ceil(x/2),ceil(y/2))) && (z <= g2(ceil(x/2),ceil(y/2)))
-                        I1(x,y,z)    = 0;
-                        Mask2(x,y,z) = true;
-                        I3(x,y,z)    = 0;
-                    elseif z > g2(ceil(x/2),ceil(y/2))
-                        I1(x,y,z)    = 0;
-                        I2(x,y,z)    = 0;
-                        Mask3(x,y,z) = true;
-                    end
-                end
-            end
+                 
+        Surf1 = uint8(imresize(g1, [size(I,1) size(I,2)]));
+        Surf2 = uint8(imresize(g2, [size(I,1) size(I,2)]));
+        for z = 1:size(I,3) 
+            Mask1(:,:,z) = z < Surf1;
+            Mask2(:,:,z) = (z >= Surf1) & (z <= Surf2);
+            Mask3(:,:,z) = z > Surf2;
         end
+        I1 = I.*Mask1;
+        I2 = I.*Mask2;
+        I3 = I.*Mask3;
         
     case 2 % Slice the image in two parts between surfaces: Start-g3 and g3-End
-                
-        for x=1:size(I,1)
-            for y=1:size(I,2)
-                for z=1:size(I,3)
-                    if z < (g3(ceil(x/2),ceil(y/2)))
-                        Mask1(x,y,z) = true;
-                        I2(x,y,z)    = 0;
-                    else
-                        I1(x,y,z)    = 0;
-                        Mask2(x,y,z) = true;
-                    end
-                end
-            end
+
+        Surf = uint8(imresize(g3, [size(I,1) size(I,2)]));
+        for z = 1:size(I,3) 
+            Mask1(:,:,z) = Surf >= z;
+            Mask2(:,:,z) = Surf <  z;
         end
-        
+        I1 = I.*Mask1;
+        I2 = I.*Mask2;
+                
     case 3 % Slice the image in four parts: Start-g1, g1-g2, g2-g3 and g3-End
         % Ensure g1 is first surface along Z, otherwise invert g1 and g2
         if mean(g1(:))> mean(g2(:))
@@ -104,34 +86,20 @@ switch mode
             g2 = g3;
             g3 = gx;
         end
-        
-        for x=1:size(I,1)
-            for y=1:size(I,2)
-                for z=1:size(I,3)
-                    if z < (g1(ceil(x/2),ceil(y/2)))
-                        Mask1(x,y,z) = true;
-                        I2(x,y,z)    = 0;
-                        I3(x,y,z)    = 0;
-                        I4(x,y,z)    = 0;
-                    elseif (z >= g1(ceil(x/2),ceil(y/2))) && (z < g2(ceil(x/2),ceil(y/2)))
-                        I1(x,y,z)    = 0;
-                        Mask2(x,y,z) = true;
-                        I3(x,y,z)    = 0;
-                        I4(x,y,z)    = 0;                        
-                    elseif (z >= g2(ceil(x/2),ceil(y/2))) && (z < g3(ceil(x/2),ceil(y/2)))
-                        I1(x,y,z)    = 0;
-                        I2(x,y,z)    = 0;
-                        Mask3(x,y,z) = true;
-                        I4(x,y,z)    = 0;                        
-                    elseif z >= g3(ceil(x/2),ceil(y/2))
-                        I1(x,y,z)    = 0;
-                        I2(x,y,z)    = 0;
-                        I3(x,y,z)    = 0;
-                        Mask4(x,y,z) = true;                        
-                    end
-                end
-            end
+
+        Surf1 = uint8(imresize(g1, [size(I,1) size(I,2)]));
+        Surf2 = uint8(imresize(g2, [size(I,1) size(I,2)]));
+        Surf3 = uint8(imresize(g3, [size(I,1) size(I,2)]));
+        for z = 1:size(I,3) 
+            Mask1(:,:,z) = z < Surf1;
+            Mask2(:,:,z) = (z >= Surf1) & (z < Surf2);
+            Mask3(:,:,z) = (z >= Surf2) & (z < Surf3);
+            Mask4(:,:,z) = z >= Surf3;
         end
+        I1 = I.*Mask1;
+        I2 = I.*Mask2;
+        I3 = I.*Mask3;
+        I4 = I.*Mask3;        
 end
-fprintf('DONE\n');
+fprintf(['DONE in ' num2str(toc) ' seconds\n']);
 end
