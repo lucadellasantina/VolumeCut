@@ -28,6 +28,7 @@
 %  + New reference point drawing near 2X faster
 %  + loadImageStack uses memory-efficient tiffreadVolume()
 %  + New slicing algorithm, near 4X faster
+%  + Single instance of the app allowed
 %
 % _*Version 5.2*            created on 2020-09-19 by Luca Della Santina_ 
 %
