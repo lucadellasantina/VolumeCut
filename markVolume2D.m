@@ -733,11 +733,11 @@ function [SelObjID, image_handle, navi_handle] = redraw(image_handle, navi_handl
 
 SelObjID        = 0;
 SelObjColor     = uint8([255 255 0])'; % Yellow
-ValObjColor     = uint8([0 255 0])';   % Green
-RejObjColor     = uint8([255 0 0])';   % Red
+ValObjColor     = uint8([0 175 0])';   % Green
+RejObjColor     = uint8([175 0 0])';   % Red
 PostCut         = ones(NaviRectSize(1), NaviRectSize(2), 3, 'uint8');
-PostCutResized  = zeros(size(F,1), size(F,2), 3, 'uint8');
-PostVoxMapCut   = PostCut;
+MaskOverlay     = PostCut;
+MaskColorize    = PostCut;
 
 if (Pos(1) > 0) && (Pos(2) > 0) && (Pos(1) < size(F,2)) && (Pos(2) < size(F,1))
     % Find borders of the area to zoom according to passed mouse position
@@ -772,7 +772,7 @@ if (Pos(1) > 0) && (Pos(2) > 0) && (Pos(1) < size(F,2)) && (Pos(2) < size(F,1))
             if VoxPos(j,3) ~= frameNum && ~ShowAllZ
                 continue
             elseif VoxPos(j,2)>=fxmin && VoxPos(j,2)<=fxmax && VoxPos(j,1)>=fymin && VoxPos(j,1)<=fymax
-                PostVoxMapCut(VoxPos(j,1)+fypad-fymin,VoxPos(j,2)+fxpad-fxmin, :) = ValObjColor;
+                MaskOverlay(VoxPos(j,1)+fypad-fymin,VoxPos(j,2)+fxpad-fxmin, :) = ValObjColor;
             end
         end
     end
@@ -782,16 +782,16 @@ if (Pos(1) > 0) && (Pos(2) > 0) && (Pos(1) < size(F,2)) && (Pos(2) < size(F,1))
             if VoxPos(j,3) ~= frameNum && ~ShowAllZ
                 continue
             elseif VoxPos(j,2)>=fxmin && VoxPos(j,2)<=fxmax && VoxPos(j,1)>=fymin && VoxPos(j,1)<=fymax
-                PostVoxMapCut(VoxPos(j,1)+fypad-fymin,VoxPos(j,2)+fxpad-fxmin,:) = RejObjColor;
+                MaskOverlay(VoxPos(j,1)+fypad-fymin,VoxPos(j,2)+fxpad-fxmin,:) = RejObjColor;
             end
         end
     end
 
-    % Draw in RejColor all voxels below fitted surface
+    % Draw in Purple/Green voxels on either side of fitted surface
     if ~isempty(Surf)
         M = Surf>=frameNum;
         SurfMask = uint8(cat(3, M, ~M, M));
-        PostVoxMapCut = PostVoxMapCut.*SurfMask(fypad : fypad+fymax-fymin, fxpad : fxpad+fxmax-fxmin,:);
+        MaskColorize = SurfMask(fypad : fypad+fymax-fymin, fxpad : fxpad+fxmax-fxmin,:);
     end
     
     if ~isempty(SelectedObjIDs) && (numel(SelectedObjIDs)>1 || SelectedObjIDs > 0)
@@ -805,7 +805,7 @@ if (Pos(1) > 0) && (Pos(2) > 0) && (Pos(1) < size(F,2)) && (Pos(2) < size(F,1))
                 if VoxPos(j,3) ~= frameNum && ~ShowAllZ
                     continue
                 elseif VoxPos(j,2)>=fxmin && VoxPos(j,2)<=fxmax && VoxPos(j,1)>=fymin && VoxPos(j,1)<=fymax
-                    PostVoxMapCut(VoxPos(j,1)+fypad-fymin,VoxPos(j,2)+fxpad-fxmin, :) = SelObjColor;
+                    MaskOverlay(VoxPos(j,1)+fypad-fymin,VoxPos(j,2)+fxpad-fxmin, :) = SelObjColor;
                 end
             end
         end
@@ -825,7 +825,7 @@ if (Pos(1) > 0) && (Pos(2) > 0) && (Pos(1) < size(F,2)) && (Pos(2) < size(F,1))
                         if VoxPos(k,3) ~= frameNum && ~ShowAllZ
                             continue
                         elseif VoxPos(k,2)>=fxmin && VoxPos(k,2)<=fxmax && VoxPos(k,1)>=fymin && VoxPos(k,1)<=fymax
-                            PostVoxMapCut(VoxPos(k,1)+fypad-fymin, VoxPos(k,2)+fxpad-fxmin, :) = SelObjColor;
+                            MaskOverlay(VoxPos(k,1)+fypad-fymin, VoxPos(k,2)+fxpad-fxmin, :) = SelObjColor;
                         end
                     end
                     break
@@ -838,7 +838,7 @@ if (Pos(1) > 0) && (Pos(2) > 0) && (Pos(1) < size(F,2)) && (Pos(2) < size(F,1))
     % Draw the right panel containing a zoomed version of selected area
     PostCut(fypad : fypad+fymax-fymin, fxpad : fxpad+fxmax-fxmin,:) = F(fymin:fymax, fxmin:fxmax, :);
     if ShowObjects
-        PostCutResized = imresize(PostCut.*PostVoxMapCut,[size(F,1), size(F,2)], 'nearest');
+        PostCutResized = imresize(PostCut.*MaskColorize+MaskOverlay,[size(F,1), size(F,2)], 'nearest');
     else
         PostCutResized = imresize(PostCut,[size(F,1), size(F,2)], 'nearest');        
     end    
