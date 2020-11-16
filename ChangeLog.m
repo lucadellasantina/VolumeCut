@@ -21,6 +21,12 @@
 %
 % *Change log*
 %
+% _*Version 6.1*            created on 2020-11-16 by Luca Della Santina_ 
+%
+%  + New batch density by depth within limits
+%  + Custom bin size in batch density by depth
+%  + Timestamp suffix to batch measurements filename
+%
 % _*Version 6.0*            created on 2020-09-19 by Luca Della Santina_ 
 %
 %  + MATLAB R2020b required
@@ -29,6 +35,7 @@
 %  + loadImageStack uses memory-efficient tiffreadVolume()
 %  + New slicing algorithm, near 4X faster
 %  + Single instance of the app allowed
+%  + Change name of objects in visual editor
 %
 % _*Version 5.2*            created on 2020-09-19 by Luca Della Santina_ 
 %

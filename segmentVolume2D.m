@@ -16,11 +16,12 @@
 %  You should have received a copy of the GNU General Public License
 %  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 %
-function Dots = markVolume2D(I, Dots)
+function Mask = segmentVolume2D(I)
 
     % Default parameter values
     CutNumVox  = size(I); % Magnify a zoom region of this size
     Isize      = size(I);
+    Mask       = zeros(Isize, 'uint8');
     nFrames    = Isize(3);
     Surface    = [];
     actionType = 'Add';
@@ -32,8 +33,10 @@ function Dots = markVolume2D(I, Dots)
     frame      = ceil(nFrames/2); % Current frame
     Iframe     = I(:,:,frame);
     Iframe     = cat(3,Iframe,Iframe,Iframe);
+    Mframe     = Mask(:,:,frame);
     SelObjID   = 0;
     brushSize  = ceil(Isize(1)/50);
+    thresh     = 0;
 	
     % Load icons
     IconZoomIn      = imread('48px-Zoom-in.png');
@@ -49,9 +52,6 @@ function Dots = markVolume2D(I, Dots)
     IconMoveLeft    = imread('48px-left.png');
     IconMoveRight   = imread('48px-right.png');
     IconMoveCenter  = imread('48px-center.png');
-    IconShiftUp     = imread('48px-shift-up.png');
-    IconShiftDown   = imread('48px-shift-down.png');
-    IconFlipVert    = imread('48px-flip-vertical.png');
     
 	% Initialize GUI
     % MATLAB Bug workaround: need to resize window under units=pixels 
@@ -74,32 +74,32 @@ function Dots = markVolume2D(I, Dots)
 	scroll_handle = patch([0 1 1 0] * scroll_bar_width, [0 0 1 1], [.8 .8 .8], 'Parent',scroll_axes, 'EdgeColor','none', 'ButtonDownFcn', @on_click);
 
     % Add GUI conmponents
-    pnlSettings     = uipanel('Title','Reference Points','Units','normalized','Position',[.003,.005,.195,.99]); %#ok, unused variable
-    txtObjName      = uicontrol('Style','edit'      ,'Units','normalized','Position',[.010,.930,.180,.03],'String', Dots.Name, 'tooltip', 'Name of reference points','Callback', @txtObjName_changed);
-    cmbAction       = uicontrol('Style','popup'     ,'Units','normalized','Position',[.010,.880,.180,.04],'String', {'Add', 'Select'}, 'tooltip', 'Current Action','Callback', @cmbAction_changed);    
-    txtValidObjs    = uicontrol('Style','text'      ,'Units','normalized','position',[.007,.860,.185,.02],'String',['Valid: ' num2str(numel(find(Dots.Filter)))]);
-    txtSelObjID     = uicontrol('Style','text'      ,'Units','normalized','position',[.007,.835,.185,.02],'String','Object#: N/A');
-    txtSelObjPos    = uicontrol('Style','text'      ,'Units','normalized','position',[.007,.810,.185,.02],'String','Volume: N/A');
-    chkShowObjects  = uicontrol('Style','checkbox'  ,'Units','normalized','position',[.007,.780,.090,.02],'String','Show/Hide', 'Value',1, 'tooltip', 'Color Objects (spacebar)','Callback',@chkShowObjects_changed);
-    chkShowAllZ     = uicontrol('Style','checkbox'  ,'Units','normalized','position',[.110,.780,.080,.02],'String','Ignore Z', 'Value',1,'Callback',@chkShowAllZ_changed);
-    lstDots         = uicontrol('Style','listbox'   ,'Units','normalized','position',[.007,.570,.185,.20],'String',[],'Callback',@lstDots_valueChanged);    
+    pnlSettings     = uipanel('Title','Segmentation tools','Units','normalized','Position',[.003,.005,.195,.99]); %#ok, unused variable
+    cmbAction       = uicontrol('Style','popup'     ,'Units','normalized','Position',[.010,.920,.180,.04],'String', {'Add', 'Select'}, 'tooltip', 'Current Action','Callback', @cmbAction_changed);    
+    chkShowObjects  = uicontrol('Style','checkbox'  ,'Units','normalized','position',[.007,.900,.090,.02],'String','Show/Hide', 'Value',1, 'tooltip', 'Color Objects (spacebar)','Callback',@chkShowObjects_changed);
+    chkShowAllZ     = uicontrol('Style','checkbox'  ,'Units','normalized','position',[.110,.900,.080,.02],'String','Ignore Z', 'Value',1,'Callback',@chkShowAllZ_changed);
 
-    btnLoad         = uicontrol('Style','Pushbutton','Units','normalized','position',[.007,.490,.060,.07],'cdata',IconLoad,     'tooltip', 'Load Objects','Callback',@btnLoad_clicked); %#ok, unused variable
-    btnDelete       = uicontrol('Style','Pushbutton','Units','normalized','position',[.069,.490,.060,.07],'cdata',IconDelete,   'tooltip', 'Delete Object','Callback',@btnDelete_clicked); %#ok, unused variable
-    btnFitSurf      = uicontrol('Style','Pushbutton','Units','normalized','position',[.132,.490,.060,.07],'cdata',IconSurface,  'tooltip', 'Fit Surface','Callback',@btnFitSurface_clicked); %#ok, unused variable
-    btnShiftUp      = uicontrol('Style','Pushbutton','Units','normalized','position',[.007,.420,.060,.07],'cdata',IconShiftUp,  'tooltip', 'Shift all points up one plane','Callback',@shift_up); %#ok, unused variable
-    btnFlipVertical = uicontrol('Style','Pushbutton','Units','normalized','position',[.069,.420,.060,.07],'cdata',IconFlipVert, 'tooltip', 'Flip all points along Z','Callback',@flip_vertical); %#ok, unused variable
-    btnShiftDown    = uicontrol('Style','Pushbutton','Units','normalized','position',[.132,.420,.060,.07],'cdata',IconShiftDown,'tooltip', 'Shift all points down one plane','Callback',@shift_down); %#ok, unused variable
+    % Primary filter parameter controls
+    txtFilter       = uicontrol('Style','text'      ,'Units','normalized','position',[.007,.835,.185,.02],'String','Threshold'); %#ok, unused variable   
+    cmbFilterType   = uicontrol('Style','popup'     ,'Units','normalized','Position',[.007,.790,.140,.04],'String', {'Disabled', 'Simple Threshold'},'Callback', @cmbFilterType_changed);  
+    cmbFilterDir    = uicontrol('Style','popup'     ,'Units','normalized','Position',[.150,.790,.045,.04],'String', {'>=', '<='}, 'Visible', 'off'  ,'callback',@cmbFilterDir_changed);            
+    btnMinus        = uicontrol('Style','Pushbutton','Units','normalized','position',[.007,.755,.045,.04],'String','-','Visible','off'              ,'CallBack',@btnMinus_clicked);    
+    txtThresh       = uicontrol('Style','edit'      ,'Units','normalized','Position',[.053,.755,.091,.04],'String',num2str(thresh),'Visible', 'off' ,'CallBack',@txtThresh_changed);
+    btnPlus         = uicontrol('Style','Pushbutton','Units','normalized','position',[.145,.755,.045,.04],'String','+','Visible', 'off'             ,'CallBack',@btnPlus_clicked);    
 
-    btnMoveLeft     = uicontrol('Style','Pushbutton','Units','normalized','position',[.007,.260,.060,.07],'cdata',IconMoveLeft,  'tooltip', 'Move Left (a)','Callback',@move_left); %#ok, unused variable
-    btnMoveUp       = uicontrol('Style','Pushbutton','Units','normalized','position',[.069,.330,.060,.07],'cdata',IconMoveUp,    'tooltip', 'Move Up (w)','Callback',@move_up); %#ok, unused variable
-    btnMoveCenter   = uicontrol('Style','Pushbutton','Units','normalized','position',[.069,.260,.060,.07],'cdata',IconMoveCenter,'tooltip', 'Move to Center','Callback',@move_center); %#ok, unused variable
-    btnMoveDown     = uicontrol('Style','Pushbutton','Units','normalized','position',[.069,.190,.060,.07],'cdata',IconMoveDown,  'tooltip', 'Move Down (s)','Callback',@move_down); %#ok, unused variable
-    btnMoveRight    = uicontrol('Style','Pushbutton','Units','normalized','position',[.132,.260,.060,.07],'cdata',IconMoveRight, 'tooltip', 'Move Right (d)','Callback',@move_right); %#ok, unused variable
+    btnLoad         = uicontrol('Style','Pushbutton','Units','normalized','position',[.007,.490,.060,.07],'cdata',IconLoad,    'tooltip', 'Load Objects','Callback',@btnLoad_clicked); %#ok, unused variable
+    btnDelete       = uicontrol('Style','Pushbutton','Units','normalized','position',[.069,.490,.060,.07],'cdata',IconDelete,  'tooltip', 'Delete Object','Callback',@btnDelete_clicked); %#ok, unused variable
+    btnFitSurf      = uicontrol('Style','Pushbutton','Units','normalized','position',[.132,.490,.060,.07],'cdata',IconSurface, 'tooltip', 'Fit Surface','Callback',@btnFitSurface_clicked); %#ok, unused variable
+
+    btnMoveLeft     = uicontrol('Style','Pushbutton','Units','normalized','position',[.007,.320,.060,.07],'cdata',IconMoveLeft,  'tooltip', 'Move Left (a)','Callback',@move_left); %#ok, unused variable
+    btnMoveUp       = uicontrol('Style','Pushbutton','Units','normalized','position',[.069,.390,.060,.07],'cdata',IconMoveUp,    'tooltip', 'Move Up (w)','Callback',@move_up); %#ok, unused variable
+    btnMoveCenter   = uicontrol('Style','Pushbutton','Units','normalized','position',[.069,.320,.060,.07],'cdata',IconMoveCenter,'tooltip', 'Move to Center','Callback',@move_center); %#ok, unused variable
+    btnMoveDown     = uicontrol('Style','Pushbutton','Units','normalized','position',[.069,.250,.060,.07],'cdata',IconMoveDown,  'tooltip', 'Move Down (s)','Callback',@move_down); %#ok, unused variable
+    btnMoveRight    = uicontrol('Style','Pushbutton','Units','normalized','position',[.132,.320,.060,.07],'cdata',IconMoveRight, 'tooltip', 'Move Right (d)','Callback',@move_right); %#ok, unused variable
         
-    btnZoomIn       = uicontrol('Style','Pushbutton','Units','normalized','position',[.007,.100,.060,.07],'cdata',IconZoomIn,   'tooltip', 'Zoom In (+)','Callback',@btnZoomIn_clicked); %#ok, unused variable
-    btnZoomOut      = uicontrol('Style','Pushbutton','Units','normalized','position',[.069,.100,.060,.07],'cdata',IconZoomOut,  'tooltip', 'Zoom Out (-)','Callback',@btnZoomOut_clicked); %#ok, unused variable
-    btnZoomFit      = uicontrol('Style','Pushbutton','Units','normalized','position',[.132,.100,.060,.07],'cdata',IconZoomFit,  'tooltip', 'Full Image','Callback',@btnZoomFit_clicked); %#ok, unused variable
+    btnZoomIn       = uicontrol('Style','Pushbutton','Units','normalized','position',[.007,.130,.060,.07],'cdata',IconZoomIn,   'tooltip', 'Zoom In (+)','Callback',@btnZoomIn_clicked); %#ok, unused variable
+    btnZoomOut      = uicontrol('Style','Pushbutton','Units','normalized','position',[.069,.130,.060,.07],'cdata',IconZoomOut,  'tooltip', 'Zoom Out (-)','Callback',@btnZoomOut_clicked); %#ok, unused variable
+    btnZoomFit      = uicontrol('Style','Pushbutton','Units','normalized','position',[.132,.130,.060,.07],'cdata',IconZoomFit,  'tooltip', 'Full Image','Callback',@btnZoomFit_clicked); %#ok, unused variable
 
     btnSave         = uicontrol('Style','Pushbutton','Units','normalized','position',[.040,.015,.060,.07],'cdata',IconSave, 'tooltip', 'Save Points','Callback',@btnSave_clicked); %#ok, unused variable    
     btnSnapshot     = uicontrol('Style','Pushbutton','Units','normalized','position',[.102,.015,.060,.07],'cdata',IconScreenshot, 'tooltip', 'Take a Screenshot','Callback',@btnSnapshot_clicked); %#ok, unused variable
@@ -111,64 +111,76 @@ function Dots = markVolume2D(I, Dots)
     PosMouse        = [0,0]; % mouse pointer position in screen coordinates
     Hotkey          = {}; % Contains 'control, 'alt', 'shift'
     brush           = rectangle(axes_handle,'Curvature', [1 1],'EdgeColor', [1 1 0],'LineWidth',2,'LineStyle','-');
-    simulatedClick  = false; % if true the current click is simulated by SimulateClick function
+    simulatedClick  = false; % if true the current click is simulated by SimulateClick function   
     cmbAction_assign(actionType);
+    
+    Dots.Name = '';
+    Dots.Pos = [];
+    Dots.Vox = [];
+    Dots.Filter = [];    
 
-    lstDotsRefresh;    
     scroll(frame, 'right');
     uiwait;
     
-    function lstDotsRefresh
-        % Updates list of available Objects (Objects are ROIs in the image)
-        set(lstDots, 'String', 1:numel(Dots.Filter));
-        set(txtValidObjs,'string',['Total: ' num2str(numel(find(Dots.Filter)))]);
-        
-        if SelObjID > 0 && SelObjID <= numel(Dots.Filter)            
-            PosZoom = [Dots.Pos(SelObjID, 2), Dots.Pos(SelObjID, 1)];
-            set(lstDots, 'Value', SelObjID);
-            lstDots_valueChanged(lstDots, []);
-            
-        elseif SelObjID > numel(Dots.Filter)
-            SelObjID = numel(Dots.Filter);
-            set(lstDots, 'Value', SelObjID);
-            disp('dot was out of range');
+    function cmbFilterDir_changed(src,event) %#ok, unused arguments
+        applyFilter(thresh);
+        simulatedClick = true;        
+        SimulateClick;
+        simulatedClick = false;         
+    end
+    
+    function btnPlus_clicked(src, event) %#ok, unused arguments
+        new_thresh = min(thresh + 1, 255);
+        set(txtThresh,'string',num2str(new_thresh));
+        applyFilter(new_thresh);
+    end
+
+    function btnMinus_clicked(src, event) %#ok, unused arguments
+        new_thresh = max(thresh - 1, 0);
+        set(txtThresh,'string',num2str(new_thresh));
+        applyFilter(new_thresh);
+    end
+
+    function txtThresh_changed(src, event) %#ok, unused arguments
+        thresh_str = get(src,'String');
+        applyFilter(str2double(thresh_str);
+    end
+
+    function cmbFilterType_changed(src, event) %#ok, unused arguments
+        switch get(src,'Value')
+            case 1 % None
+                new_thresh = 0;
+                set(cmbFilterDir,'Visible','off');
+                set(txtThresh,'Visible','off');
+                set(btnPlus,'Visible','off');
+                set(btnMinus,'Visible','off');
+            case 2 % Simple Threshold
+                try
+                    new_thresh = round(mean(I(:)));
+                    set(cmbFilterDir,'Value', 0);
+                end
+                set(cmbFilterDir,'Visible','on');
+                set(txtThresh,'Visible','on');
+                set(btnPlus,'Visible','on');
+                set(btnMinus,'Visible','on');                
+        end
+        applyFilter(new_thresh);
+        set(txtThresh,'string',num2str(new_thresh));        
+    end
+
+    function applyFilter(new_thresh)
+        thresh = new_thresh;
+        % Apply primary filter criteria if selected        
+        switch get(cmbFilterType,'Value')
+            case 1 % None, reset all thresholds
+            case 2 % Simple Threshld
+                Mask = uint8(I > thresh);
         end
         
         scroll(frame, 'right');
-    end
-
-    function lstDots_valueChanged(src,event) %#ok, unused arguments
-        % Update on-screen info of selected object        
-        SelObjID = get(src, 'Value');
-        
-        if SelObjID > 0 && numel(Dots.Filter)>0
-            set(txtSelObjID ,'string',['ID#: ' num2str(SelObjID)]);
-            set(txtSelObjPos,'string',['Pos X:' num2str(Dots.Pos(SelObjID,1)) ', Y:' num2str(Dots.Pos(SelObjID,2)) ', Z:' num2str(Dots.Pos(SelObjID,3))]);
-        else
-            set(txtSelObjID    ,'string','ID#: ');
-            set(txtSelObjPos   ,'string','Pos : ');
-        end
-
-        % Store Zoom rectangle verteces coodinates (clockwise from top-left)
-        Rect(1,:) = [PosRect(1), PosRect(2)];
-        Rect(2,:) = [PosRect(1)+CutNumVox(2), PosRect(2)];
-        Rect(3,:) = [PosRect(1)+CutNumVox(2), PosRect(2)+CutNumVox(1)];
-        Rect(4,:) = [PosRect(1), PosRect(2)+CutNumVox(1)];
-
-        if SelObjID > 0 && (~inpolygon_fast(Dots.Pos(SelObjID,1), Dots.Pos(SelObjID,2),Rect(:,1), Rect(:,2)) || frame ~= Dots.Pos(SelObjID,3))
-            Pos = [Dots.Pos(SelObjID,1), Dots.Pos(SelObjID,2), Dots.Pos(SelObjID,3)];
-            % Ensure new position is within boundaries of the image
-            Pos     = [max(Pos(1),CutNumVox(2)/2), max(Pos(2), CutNumVox(1)/2), Dots.Pos(SelObjID,3)];
-            Pos     = [min(Pos(1),Isize(2)-CutNumVox(2)/2), min(Pos(2), Isize(1)-CutNumVox(1)/2), Dots.Pos(SelObjID,3)];
-            PosRect = [Pos(1)-CutNumVox(2)/2, Pos(2)-CutNumVox(1)/2, Dots.Pos(SelObjID,3)];
-            PosZoom = [-1 -1 -1];
-            simulatedClick = true;        
-            SimulateClick;
-            simulatedClick = false;         
-            scroll(Dots.Pos(SelObjID,3), 'right');
-        else
-            scroll(frame, 'right');
-        end
+        simulatedClick = true;        
+        SimulateClick;
+        simulatedClick = false;        
     end
 
     function btnDelete_clicked(src,event) %#ok, unused arguments
@@ -221,14 +233,6 @@ function Dots = markVolume2D(I, Dots)
 
         Dots.Vox(ID).RawBright = I(Dots.Vox(ID).Ind);
         lstDotsRefresh;
-    end
-
-    function txtObjName_changed(src,event) %#ok, unused parameters
-        Dots.Name = get(src,'String');        
-
-        simulatedClick = true;        
-        SimulateClick;
-        simulatedClick = false; 
     end
 
     function cmbAction_changed(src,event) %#ok, unused parameters
@@ -336,19 +340,17 @@ function Dots = markVolume2D(I, Dots)
     end
 
     function btnSave_clicked(src, event) %#ok, unused arguments
-        Path = uigetdir(pwd, 'Select folder to save points');
-        FileName = [Path filesep Dots.Name '.mat'];
-        save(FileName, '-struct', 'Dots');
+        Path = uigetdir;
+        FileName = [Path filesep 'Mask.tif'];
+        saveastiff(M, FileName);
         msgbox('Fiducial points saved.', 'Screenshot', 'help');
     end
 
     function btnLoad_clicked(src, event) %#ok, unused arguments
         FileName = uigetfile('*.mat');
-        Dots = load(FileName);
-        lstDotsRefresh;
-        set(txtObjName, 'String', Dots.Name);
+        M = loadImageStack(FileName);
         scroll(frame, 'right');
-        msgbox('Fiducial points Loaded.', 'Complete', 'help');
+        msgbox('Mask Loaded.', 'Complete', 'help');
     end
 
     function wheel_scroll(src, event) %#ok, unused arguments
@@ -461,79 +463,6 @@ function Dots = markVolume2D(I, Dots)
         SimulateClick;
         simulatedClick = false;        
     end
-
-    function shift_up(src, event) %#ok, unused arguments
-        if isempty(Dots.Pos)
-            return
-        end
-        
-        % Shift all reference points up one Z plane
-        for ID = 1:size(Dots.Pos,1)
-            
-            Dots.Pos(ID,3) = max(1, Dots.Pos(ID,3)-1);            
-            for vox = 1:numel(Dots.Vox(ID).Ind)
-                Dots.Vox(ID).Pos(vox,3) = max(1, Dots.Vox(ID).Pos(vox,3)-1);
-            end
-            
-            % Recalculate index and brighness of new voxels
-            Dots.Vox(ID).Ind = sub2ind(Isize, Dots.Vox(ID).Pos(:,1), Dots.Vox(ID).Pos(:,2), Dots.Vox(ID).Pos(:,3));
-            Dots.Vox(ID).RawBright = I(Dots.Vox(ID).Ind);
-        end
- 
-        scroll(max(1, frame-1), 'right');
-        simulatedClick = true;
-        SimulateClick;
-        simulatedClick = false;        
-    end
-
-    function shift_down(src, event) %#ok, unused arguments
-        if isempty(Dots.Pos)
-            return
-        end
-        
-        % Shift all reference points down one Z plane
-        for ID = 1:size(Dots.Pos,1)
-            
-            Dots.Pos(ID,3) = min(Isize(3), Dots.Pos(ID,3)+1);            
-            for vox = 1:numel(Dots.Vox(ID).Ind)
-                Dots.Vox(ID).Pos(vox,3) = min(Isize(3), Dots.Vox(ID).Pos(vox,3)+1);
-            end
-            
-            % Recalculate index and brighness of new voxels
-            Dots.Vox(ID).Ind = sub2ind(Isize, Dots.Vox(ID).Pos(:,1), Dots.Vox(ID).Pos(:,2), Dots.Vox(ID).Pos(:,3));
-            Dots.Vox(ID).RawBright = I(Dots.Vox(ID).Ind);
-        end
- 
-        scroll(min(frame+1, Isize(3)), 'right');
-        simulatedClick = true;
-        SimulateClick;
-        simulatedClick = false;        
-    end
-
-    function flip_vertical(src, event) %#ok, unused arguments
-        if isempty(Dots.Pos)
-            return
-        end
-        
-        % Flip all points along the Z plane
-        for ID = 1:size(Dots.Pos,1)
-            
-            Dots.Pos(ID,3) = Isize(3)- Dots.Pos(ID,3);            
-            for vox = 1:numel(Dots.Vox(ID).Ind)
-                Dots.Vox(ID).Pos(vox,3) = Isize(3) - Dots.Vox(ID).Pos(vox,3);
-            end
-            
-            % Recalculate index and brighness of new voxels
-            Dots.Vox(ID).Ind = sub2ind(Isize, Dots.Vox(ID).Pos(:,1), Dots.Vox(ID).Pos(:,2), Dots.Vox(ID).Pos(:,3));
-            Dots.Vox(ID).RawBright = I(Dots.Vox(ID).Ind);
-        end
- 
-        scroll(Isize(3)-frame, 'right');
-        simulatedClick = true;
-        SimulateClick;
-        simulatedClick = false;        
-    end
-
 
     function key_press(src, event) %#ok, unused arguments
         %event.Key % displays the name of the pressed key
@@ -763,7 +692,7 @@ function Dots = markVolume2D(I, Dots)
                                     Iframe = I(:,:,frame);
                                     Iframe = cat(3, Iframe, Iframe, Iframe); % Create an RGB version of I
 
-                                    SelObjID = redraw(frame_handle, rect_handle, frame, chkShowObjects.Value, Pos, PosZoom, Iframe, CutNumVox, Dots, Dots.Filter, 0, 'right', chkShowAllZ.Value, Surface);
+                                    SelObjID = redraw(frame_handle, rect_handle, chkShowObjects.Value, Pos, Iframe, CutNumVox, Mask, 'right');
                                     if SelObjID > 0
                                         set(lstDots, 'Value', SelObjID);
                                     end
@@ -790,42 +719,30 @@ function Dots = markVolume2D(I, Dots)
             % Update current frame
             frame = new_f;
             Iframe = I(:,:,frame);
-            Iframe = cat(3, Iframe, Iframe, Iframe); % Create an RGB version of I (monochromatic)            
+            Iframe = cat(3, Iframe, Iframe, Iframe); % Create an RGB version of I (monochromatic) 
+            Mframe = Mask(:,:,frame);
         end
 
     	% Move scroll bar to new position
         scroll_x = (frame - 1) / nFrames;
         set(scroll_handle, 'XData', scroll_x + [0 1 1 0] * scroll_bar_width);
-        set(fig_handle, 'Name', ['Slice ' num2str(frame) '/' num2str(nFrames) ' - Zoom:' num2str(10*ceil(10*Isize(1)/CutNumVox(1)),'%u') '% - Points: ' Dots.Name]);        
+        set(fig_handle, 'Name', ['Slice ' num2str(frame) '/' num2str(nFrames) ' - Zoom:' num2str(10*ceil(10*Isize(1)/CutNumVox(1)),'%u') '%']);        
         
         %set to the right axes and call the custom redraw function
         set(fig_handle, 'CurrentAxes', axes_handle);
         switch WhichPanel
-            case 'left',  [SelObjID, frame_handle, rect_handle] = redraw(frame_handle, rect_handle, frame, chkShowObjects.Value, Pos, PosZoom, Iframe, CutNumVox, Dots, Dots.Filter, SelObjID, 'left', chkShowAllZ.Value, Surface);                
-            case 'right', [SelObjID, frame_handle, rect_handle] = redraw(frame_handle, rect_handle, frame, chkShowObjects.Value, Pos, PosZoom, Iframe, CutNumVox, Dots, Dots.Filter, SelObjID, 'right', chkShowAllZ.Value, Surface);                
-        end        
-        
-        if numel(SelObjID) == 1 && SelObjID > 0
-            set(txtSelObjID,'string',['Selected: #' num2str(SelObjID)]);
-            set(txtSelObjPos,'string',['Pos X:' num2str(Dots.Pos(SelObjID,1)) ', Y:' num2str(Dots.Pos(SelObjID,2)) ', Z:' num2str(Dots.Pos(SelObjID,3))]);            
-        else
-            set(txtSelObjID,'string','Selected: N/A');
-            set(txtSelObjPos,'string','Pos : N/A');
-        end
+            case 'left',  [frame_handle, rect_handle] = redraw(frame_handle, rect_handle, chkShowObjects.Value, Pos, Iframe, CutNumVox, Mframe, 'left');                
+            case 'right', [frame_handle, rect_handle] = redraw(frame_handle, rect_handle, chkShowObjects.Value, Pos, Iframe, CutNumVox, Mframe, 'right');                
+        end                
     end
 end
 
-function [SelObjID, image_handle, navi_handle] = redraw(image_handle, navi_handle, frameNum, ShowObjects, Pos, PosZoom, F, NaviRectSize, Dots, passF, SelectedObjIDs, WhichPanel, ShowAllZ, Surf)
+function [image_handle, navi_handle] = redraw(image_handle, navi_handle, ShowObjects, Pos, F, NaviRectSize, M, WhichPanel)
 %% Redraw function, full image on left panel, zoomed area on right panel
 % Note: Pos(1), PosZoom(1) is X
 % Dots.Pos(:,1), I(1), PostCut(1), NaviRectSize(1) = Y
 
-SelObjID        = 0;
-SelObjColor     = uint8([255 255 0])'; % Yellow
-ValObjColor     = uint8([0 175 0])';   % Green
-RejObjColor     = uint8([175 0 0])';   % Red
 PostCut         = ones(NaviRectSize(1), NaviRectSize(2), 3, 'uint8');
-MaskOverlay     = PostCut;
 MaskColorize    = PostCut;
 
 if (Pos(1) > 0) && (Pos(2) > 0) && (Pos(1) < size(F,2)) && (Pos(2) < size(F,1))
@@ -836,98 +753,17 @@ if (Pos(1) > 0) && (Pos(2) > 0) && (Pos(1) < size(F,2)) && (Pos(2) < size(F,1))
     fymax = min(ceil(Pos(2) + NaviRectSize(1)/2), size(F,1));
     fxpad = NaviRectSize(2) - (fxmax - fxmin); % padding if out of image
     fypad = NaviRectSize(1) - (fymax - fymin); % padding if out of image
-    
-    % Find indeces of objects visible within the zoomed area
-    valIcut = passF;
-    rejIcut = ~passF;
-    for i = 1:numel(valIcut)
-        valIcut(i) = valIcut(i) && Dots.Pos(i,2)>=fxmin && Dots.Pos(i,2)<=fxmax && Dots.Pos(i,1)>=fymin && Dots.Pos(i,1)<=fymax;
-        rejIcut(i) = rejIcut(i) && Dots.Pos(i,2)>=fxmin && Dots.Pos(i,2)<=fxmax && Dots.Pos(i,1)>=fymin && Dots.Pos(i,1)<=fymax;
-    end
-    ValObjIDs = find(valIcut); % IDs of valid objects within field of view  
-    RejObjIDs = find(rejIcut); % IDs of rejected objects within field of view 
-    
-    % Concatenate objects lists depending on whether they are in columns or rows
-    if size(ValObjIDs,1) == 1
-        VisObjIDs = [ValObjIDs, RejObjIDs]; % IDs of objects within field of view 
-    else
-        VisObjIDs = [ValObjIDs; RejObjIDs]; % IDs of objects within field of view 
-    end
-    
-    % Flag valid and rejected object IDs within zoomed area    
-    for i=1:numel(ValObjIDs)
-        VoxPos = Dots.Vox(ValObjIDs(i)).Pos;
-        for j = 1:size(VoxPos,1)
-            if VoxPos(j,3) ~= frameNum && ~ShowAllZ
-                continue
-            elseif VoxPos(j,2)>=fxmin && VoxPos(j,2)<=fxmax && VoxPos(j,1)>=fymin && VoxPos(j,1)<=fymax
-                MaskOverlay(VoxPos(j,1)+fypad-fymin,VoxPos(j,2)+fxpad-fxmin, :) = ValObjColor;
-            end
-        end
-    end
-    for i=1:numel(RejObjIDs)
-        VoxPos = Dots.Vox(RejObjIDs(i)).Pos;
-        for j = 1:size(VoxPos,1)
-            if VoxPos(j,3) ~= frameNum && ~ShowAllZ
-                continue
-            elseif VoxPos(j,2)>=fxmin && VoxPos(j,2)<=fxmax && VoxPos(j,1)>=fymin && VoxPos(j,1)<=fymax
-                MaskOverlay(VoxPos(j,1)+fypad-fymin,VoxPos(j,2)+fxpad-fxmin,:) = RejObjColor;
-            end
-        end
-    end
-
+            
     % Draw in Purple/Green voxels on either side of fitted surface
-    if ~isempty(Surf)
-        M = Surf>=frameNum;
-        SurfMask = uint8(cat(3, M, ~M, M));
-        MaskColorize = SurfMask(fypad : fypad+fymax-fymin, fxpad : fxpad+fxmax-fxmin,:);
+    if ~isempty(M)
+        Mask = uint8(cat(3, ~M, M, ~M));
+        MaskColorize = Mask(fypad : fypad+fymax-fymin, fxpad : fxpad+fxmax-fxmin,:);
     end
-    
-    if ~isempty(SelectedObjIDs) && (numel(SelectedObjIDs)>1 || SelectedObjIDs > 0)
-        % If user requested objects within the zoomed region, select them
         
-        SelObjID = SelectedObjIDs;        
-        for i = 1: numel(SelectedObjIDs)
-            VoxPos = Dots.Vox(SelectedObjIDs(i)).Pos;
-            %disp(['SelectedObjID: ' num2str(SelectedObjIDs(i))]);
-            for j = 1:size(VoxPos,1)
-                if VoxPos(j,3) ~= frameNum && ~ShowAllZ
-                    continue
-                elseif VoxPos(j,2)>=fxmin && VoxPos(j,2)<=fxmax && VoxPos(j,1)>=fymin && VoxPos(j,1)<=fymax
-                    MaskOverlay(VoxPos(j,1)+fypad-fymin,VoxPos(j,2)+fxpad-fxmin, :) = SelObjColor;
-                end
-            end
-        end
-    elseif PosZoom(1) > 0 && PosZoom(2) > 0
-        % If user queried for objects at a specific location coordinates
-        %disp(['X:' num2str(PosZoom(1)) ' Y:' num2str(PosZoom(2)) ' xmin:' num2str(fxmin) ' ymin:' num2str(fymin)]);
-        absX = fxpad+fxmin+PosZoom(1)-2;            
-        absY = fypad+fymin+PosZoom(2)-2;
-        for i=1:numel(VisObjIDs)
-            VoxPos  = Dots.Vox(VisObjIDs(i)).Pos;
-            for j = 1:size(VoxPos,1)                
-                if VoxPos(j,3) ~= frameNum && ~ShowAllZ
-                    continue
-                elseif VoxPos(j,1)==absY && VoxPos(j,2)==absX
-                    SelObjID = VisObjIDs(i); % Return ID of selected object
-                    for k = 1:size(VoxPos,1)
-                        if VoxPos(k,3) ~= frameNum && ~ShowAllZ
-                            continue
-                        elseif VoxPos(k,2)>=fxmin && VoxPos(k,2)<=fxmax && VoxPos(k,1)>=fymin && VoxPos(k,1)<=fymax
-                            MaskOverlay(VoxPos(k,1)+fypad-fymin, VoxPos(k,2)+fxpad-fxmin, :) = SelObjColor;
-                        end
-                    end
-                    break
-                end
-            end
-        end
-        
-    end
-    
     % Draw the right panel containing a zoomed version of selected area
     PostCut(fypad : fypad+fymax-fymin, fxpad : fxpad+fxmax-fxmin,:) = F(fymin:fymax, fxmin:fxmax, :);
     if ShowObjects
-        PostCutResized = imresize(PostCut.*MaskColorize+MaskOverlay,[size(F,1), size(F,2)], 'nearest');
+        PostCutResized = imresize(PostCut.*MaskColorize,[size(F,1), size(F,2)], 'nearest');
     else
         PostCutResized = imresize(PostCut,[size(F,1), size(F,2)], 'nearest');        
     end    
@@ -971,5 +807,5 @@ function SimulateClick
     mouse.mouseRelease(InputEvent.BUTTON1_MASK);
     mouse.mouseMove(MousePos(1), MousePos(2));
     
-    pause(0.1); % Slight pause to avoid repeated clicks
+    pause(0.1);
 end
