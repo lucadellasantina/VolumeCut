@@ -21,6 +21,12 @@
 %
 % *Change log*
 %
+% _*Version 6.2*            created on 2021-04-17 by Luca Della Santina_ 
+%
+%  + Sped up startup time with faster screen centering code
+%  + App window back in focus after manual annotations are done
+%  + Refactored code fixing main app losing focus after dialog
+%
 % _*Version 6.1*            created on 2020-11-16 by Luca Della Santina_ 
 %
 %  + New batch density by depth within limits
