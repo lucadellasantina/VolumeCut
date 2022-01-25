@@ -1,19 +1,19 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="1652614469" file="/home/luca/Dropbox/MATLAB scripts/VolumeCut/VolumeCut.prj" location="/home/luca/Dropbox/MATLAB scripts/VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="2634549239" file="D:\Dropbox\MATLAB scripts\VolumeCut\VolumeCut.prj" location="D:\Dropbox\MATLAB scripts\VolumeCut" name="VolumeCut" target="target.mlapps" target-name="Package App">
     <param.appname>VolumeCut</param.appname>
     <param.authnamewatermark>Luca Della Santina</param.authnamewatermark>
     <param.email>luca.dellasantina@gmail.com</param.email>
     <param.company />
-    <param.icon>${PROJECT_ROOT}/VolumeCut_resources/icon_24.png</param.icon>
+    <param.icon>${PROJECT_ROOT}\VolumeCut_resources\icon_24.png</param.icon>
     <param.icons>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/icon_48.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/icon_24.png</file>
-      <file>${PROJECT_ROOT}/VolumeCut_resources/icon_16.png</file>
+      <file>${PROJECT_ROOT}\VolumeCut_resources\icon_48.png</file>
+      <file>${PROJECT_ROOT}\VolumeCut_resources\icon_24.png</file>
+      <file>${PROJECT_ROOT}\VolumeCut_resources\icon_16.png</file>
     </param.icons>
     <param.summary>Cut image volumes along arbitrary surfaces</param.summary>
-    <param.description>Copyright 2017-2021 Luca Della Santina
+    <param.description>Copyright 2017-2022 Luca Della Santina
 Licensed under the term of GPL v3</param.description>
-    <param.screenshot>/tmp/tp8ce6532d_fb8e_44c9_bcda_f1653555f972.png</param.screenshot>
+    <param.screenshot>C:\Users\Luca\AppData\Local\Temp\tp6ac292b8_d906_4495_8231_7ab2f5473674.png</param.screenshot>
     <param.version>6.2</param.version>
     <param.products.name>
       <item>MATLAB</item>
@@ -26,9 +26,9 @@ Licensed under the term of GPL v3</param.description>
       <item>17</item>
     </param.products.id>
     <param.products.version>
-      <item>9.10</item>
-      <item>3.5.13</item>
-      <item>11.3</item>
+      <item>9.11</item>
+      <item>3.6</item>
+      <item>11.4</item>
     </param.products.version>
     <param.platforms />
     <param.output>${PROJECT_ROOT}</param.output>
@@ -39,31 +39,31 @@ Licensed under the term of GPL v3</param.description>
       <param.output />
     </unset>
     <fileset.main>
-      <file>${PROJECT_ROOT}/VolumeCut.mlapp</file>
+      <file>${PROJECT_ROOT}\VolumeCut.mlapp</file>
     </fileset.main>
     <fileset.depfun>
-      <file>/home/luca/Dropbox/MATLAB scripts/ObjectFinder/editStruct.m</file>
-      <file>/home/luca/Dropbox/MATLAB scripts/ObjectFinder/inpoly2.m</file>
-      <file>/home/luca/Dropbox/MATLAB scripts/ObjectFinder/inpolygon_fast.m</file>
-      <file>/home/luca/Dropbox/MATLAB scripts/ObjectFinder/saveastiff.m</file>
-      <file>${PROJECT_ROOT}/Skel2Graph3D.m</file>
-      <file>${PROJECT_ROOT}/cutVolume.m</file>
-      <file>${PROJECT_ROOT}/loadImageStack.m</file>
-      <file>${PROJECT_ROOT}/markVolume2D.m</file>
-      <file>${PROJECT_ROOT}/skel2mask.m</file>
-      <file>${PROJECT_ROOT}/snt2ml.m</file>
-      <file>${PROJECT_ROOT}/surfacefit.m</file>
+      <file>D:\Dropbox\MATLAB scripts\ObjectFinder\inpoly2.m</file>
+      <file>D:\Dropbox\MATLAB scripts\ObjectFinder\inpolygon_fast.m</file>
+      <file>${PROJECT_ROOT}\cutVolume.m</file>
+      <file>${PROJECT_ROOT}\editStruct.m</file>
+      <file>${PROJECT_ROOT}\loadImageStack.m</file>
+      <file>${PROJECT_ROOT}\markVolume2D.m</file>
+      <file>${PROJECT_ROOT}\saveastiff.m</file>
+      <file>${PROJECT_ROOT}\Skel2Graph3D.m</file>
+      <file>${PROJECT_ROOT}\skel2mask.m</file>
+      <file>${PROJECT_ROOT}\snt2ml.m</file>
+      <file>${PROJECT_ROOT}\surfacefit.m</file>
     </fileset.depfun>
     <fileset.resources>
-      <file>${PROJECT_ROOT}/VolumeCut_resources</file>
+      <file>${PROJECT_ROOT}\VolumeCut_resources</file>
     </fileset.resources>
     <fileset.package />
     <build-deliverables>
-      <file location="/home/luca/Dropbox/MATLAB scripts" name="VolumeCut" optional="false">/home/luca/Dropbox/MATLAB scripts/VolumeCut</file>
+      <file location="D:\Dropbox\MATLAB scripts" name="VolumeCut" optional="false">D:\Dropbox\MATLAB scripts\VolumeCut</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/home/luca/MATLAB/R2021a</root>
+      <root>C:\Program Files\MATLAB\R2021b</root>
       <toolboxes>
         <toolbox name="matlabcoder" />
         <toolbox name="gpucoder" />
@@ -86,18 +86,18 @@ Licensed under the term of GPL v3</param.description>
       </toolbox>
     </matlab>
     <platform>
-      <unix>true</unix>
+      <unix>false</unix>
       <mac>false</mac>
-      <windows>false</windows>
+      <windows>true</windows>
       <win2k>false</win2k>
       <winxp>false</winxp>
       <vista>false</vista>
-      <linux>true</linux>
+      <linux>false</linux>
       <solaris>false</solaris>
-      <osver>5.11.0-7612-generic</osver>
+      <osver>10.0</osver>
       <os32>false</os32>
       <os64>true</os64>
-      <arch>glnxa64</arch>
+      <arch>win64</arch>
       <matlab>true</matlab>
     </platform>
   </configuration>
