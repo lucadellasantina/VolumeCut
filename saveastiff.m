@@ -1,5 +1,5 @@
 %% VolumeCut: Cut images along custom surfaces
-% Copyright (C) 2017-2019 Luca Della Santina
+% Copyright (C) 2017-2025 Luca Della Santina
 %
 %  This file is part of VolumeCut
 %

@@ -1,5 +1,5 @@
 %% VolumeCut: Cut images along custom surfaces
-% Copyright (C) 2017-2019 Luca Della Santina
+% Copyright (C) 2017-2025 Luca Della Santina
 %
 %  This file is part of VolumeCut
 %
@@ -17,9 +17,23 @@
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % This software is released under the terms of the GPL v3 software license
 %
-
+%
 %
 % *Change log*
+%
+% _*Version 6.4*            created on 2025-07-09 by Luca Della Santina_ 
+%
+%  + Ported to MATLAB 2025a
+%  + Packaged as MATLAB toolbox to adhere to new app policy
+%  + Fixed warining and errors from code analyzer
+%  + Removed Octave dependency for inpoly2.m
+%
+% _*Version 6.3*            created on 2023-08-16 by Luca Della Santina_ 
+%
+%  + Generated DOI for the release
+%  + Ported to MATLAB 2023a
+%  + Batch measuring of size properties of each object in a binary mask
+%  + Fixed volume rendering on newer MATLAB, uses faster volshow
 %
 % _*Version 6.2*            created on 2021-04-17 by Luca Della Santina_ 
 %

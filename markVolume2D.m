@@ -1,7 +1,7 @@
-%% ObjectFinder - Recognize 3D structures in image stacks
-%  Copyright (C) 2016-2020 Luca Della Santina
+%% VolumeCut: Cut images along custom surfaces
+% Copyright (C) 2017-2025 Luca Della Santina
 %
-%  This file is part of ObjectFinder
+%  This file is part of VolumeCut
 %
 %  ObjectFinder is free software: you can redistribute it and/or modify
 %  it under the terms of the GNU General Public License as published by
@@ -330,7 +330,7 @@ function Dots = markVolume2D(I, Dots)
 
         % Save screenshot into Results folder with current date & time
         Path = uigetdir;
-        FileName = [Path filesep 'Screenshot_' datestr(now, 'yyyy-mm-dd_HH-MM_AM') '.tif'];
+        FileName = [Path filesep 'Screenshot_' char(datetime("now", "Format", "yyyy-MM-dd_hh-mm_a")) '.tif'];
         imwrite(Screenshot, FileName);
         msgbox(['Screenshot saved in: ' FileName], 'Saved', 'help');
     end
@@ -547,8 +547,6 @@ function Dots = markVolume2D(I, Dots)
             case 'space'
                 chkShowObjects.Value = ~chkShowObjects.Value;
                 chkShowObjects_changed();
-            case 'v'
-                btnToggleValid_clicked();
             case {'leftarrow','a'},  move_left;
             case {'rightarrow','d'}, move_right;
             case {'uparrow','w'},    move_up;
@@ -805,7 +803,7 @@ function Dots = markVolume2D(I, Dots)
             case 'right', [SelObjID, frame_handle, rect_handle] = redraw(frame_handle, rect_handle, frame, chkShowObjects.Value, Pos, PosZoom, Iframe, CutNumVox, Dots, Dots.Filter, SelObjID, 'right', chkShowAllZ.Value, Surface);                
         end        
         
-        if numel(SelObjID) == 1 && SelObjID > 0
+        if isscalar(SelObjID) && SelObjID > 0
             set(txtSelObjID,'string',['Selected: #' num2str(SelObjID)]);
             set(txtSelObjPos,'string',['Pos X:' num2str(Dots.Pos(SelObjID,1)) ', Y:' num2str(Dots.Pos(SelObjID,2)) ', Z:' num2str(Dots.Pos(SelObjID,3))]);            
         else
